@@ -12,7 +12,8 @@ err_redir("db error({$db->errno}).", '/error.php');
 
 $query = "select count(`id`) from `beta-requests`";
 if($result = $db->query($query)) {
-	$count = $result->fetch_row()[0] + BASE_COUNT;
+    $count = $result->fetch_row();
+    $count = $count[0] + BASE_COUNT;
 	$result->free();
 }
 
@@ -48,7 +49,7 @@ if($result = $db->query($query)) {
 				<div id='content'>
 					<h1>活字网</h1>
 					<h2>让校园文印更便捷</h2>
-					<h3>已有<?: $count ?>人索取邀请函</h3>
+					<h3>已有<?= $count ?>人索取邀请函</h3>
 				</div>
 			</div>
 		</div> 
