@@ -3,20 +3,22 @@
 if (! isset($start_including))
 	return;
 
-echo '<h1>Add table: "users"</h1>';
+echo 'Add table "users"  ';
 
-$table='users';
-$tables = array(
-	'users' => array(
-		'col' => 'id mediumint unsigned not null auto_increment primary key,
-			created timestamp not null default current_timestamp',
-	),
-);
+$query = "create table `users` ( 
+	`id` mediumint unsigned not null auto_increment primary key,
+	`created` timestamp not null default current_timestamp )";
 
-$query = "create table `$table` ( {$tables[$table]['col']} )";
-echo "query: $query <br />";
+if ($db->query($query) === TRUE)
+	echo '... done<br /><em>$query</em><br />';
+elseif ($db->errno == 1050) {
+	echo '... omitting, table exists.<br />';
+	return;
+} else {
+	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
+	die($query);
+}
 
-if($db->query($query) === TRUE)
-echo 'table successfully created.<br />';
-else
-echo "error creating table: $db->error <br />";
+
+
+

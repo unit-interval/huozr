@@ -3,7 +3,7 @@
 if (! isset($start_including))
 	return;
 
-echo '<h1>Add table: "emails"</h1>';
+echo 'Add table "emails"  ';
 
 $table='emails';
 $tables = array(

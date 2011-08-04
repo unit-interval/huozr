@@ -3,7 +3,7 @@
 if (! isset($start_including))
 	return;
 
-echo '<h1>Add column "screen_name" into tables: "users"</h1>';
+echo 'Add column "screen_name" into table "users"  ';
 
 $query = "ALTER TABLE  `users` ADD  `screen_name` VARCHAR( 32 ) NOT NULL AFTER  `id`";
 

@@ -3,7 +3,7 @@
 if (! isset($start_including))
 	return;
 
-echo '<h1>Add table: "oauth_links"</h1>';
+echo 'Add table "oauth_links"  ';
 
 $table='oauth_links';
 $tables = array(

@@ -3,7 +3,7 @@
 if (! isset($start_including))
 	return;
 
-echo '<h1>Add table: "users_login"</h1>';
+echo 'Add table "users_login"  ';
 
 $table='users_login';
 $tables = array(
