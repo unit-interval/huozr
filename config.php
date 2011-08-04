@@ -11,6 +11,9 @@ define('DIR_INC', DIR_ROOT . '/inc');
 define('SESSUSER', 'huozruser');
 define('SESSPROV', 'huozrprov');
 
+/** make inc files not accessible directly */
+$start_including = true;
+
 /** local settings */
 require DIR_INC . '/config.local.php';
 

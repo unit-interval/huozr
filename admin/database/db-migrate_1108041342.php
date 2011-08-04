@@ -1,7 +1,7 @@
 <?php
 
-include '../../config.php';
-include '../../inc/database.php';
+if (! isset($start_including))
+	return;
 
 echo '<h1>Add column "screen_name" into tables: "users"</h1>';
 

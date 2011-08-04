@@ -24,11 +24,23 @@ if ($_SESSION['admin'] != true) {
 
 if (isset($_GET['cmd'])) {
 	if ($_GET['cmd'] == 'db_migrate') {
-		// do the job
+		foreach(glob('./database/db-migrate*.php') as $fn)
+			include $fn;
 	} elseif ($_GET['cmd'] == 'db_reset') {
 		if(! $development_env)
 			echo "attention! you're trying to reset the database on a none-development site.";
 		else {
+			$query = "drop database if exists " . DB_NAME;
+			if($db->query($query) === true)
+				echo "database dropped. <br />";
+			else
+				die("error dropping database: $db->error <br />");
+			$query = "create database " . DB_NAME . 
+				" character set utf8 collate utf8_general_ci";
+			if($db->query($query) === true)
+				echo "database created. <br />";
+			else
+				die("error creating database: $db->error <br />");
 		}
 	}
 }
