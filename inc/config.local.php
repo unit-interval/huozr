@@ -6,6 +6,8 @@ define('DB_USER', 'dbuser');
 define('DB_PASS', 'dbpass');
 define('DB_NAME', 'dbname');
 
+define('ADMIN_PW', 'adminpasswd');
+
 define('SALT_PW', 'Cataclysm');
 
 /* runtime variables */
