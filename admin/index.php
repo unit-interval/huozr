@@ -24,7 +24,7 @@ if ($_SESSION['admin'] != true) {
 
 if (isset($_GET['cmd'])) {
 	if ($_GET['cmd'] == 'db_migrate') {
-		foreach(glob('./database/db-migrate*.php') as $fn)
+		foreach(glob('./db-migrations/db-migrate*.php') as $fn)
 			include $fn;
 	} elseif ($_GET['cmd'] == 'db_reset') {
 		if(! $development_env)
