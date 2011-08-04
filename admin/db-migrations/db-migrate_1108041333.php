@@ -3,24 +3,45 @@
 if (! isset($start_including))
 	return;
 
-echo 'Add table "emails"  ';
+echo 'Add table `user_emails`  ';
 
-$table='emails';
-$tables = array(
-	'emails' => array(
-		'col' =>	'`id` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-					`uid` MEDIUMINT NOT NULL ,
-					`email` VARCHAR( 64 ) NOT NULL ,
-					`updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-					unique( `email` )',
-	),
-);
+$query = "create table `user_emails` ( 
+	`id` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`user_id` MEDIUMINT NOT NULL ,
+	`email` VARCHAR( 64 ) NOT NULL ,
+	`activated` bool not null default 0,
+	`primary` bool not null default 1,
+	`created` timestamp not null default current_timestamp,
+	unique `user_email` (`user_id`, `email`) )";
 
-$query = "create table `$table` ( {$tables[$table]['col']} )";
-echo "query: $query <br />";
+if ($db->query($query) === TRUE)
+	echo "... done<br /><em>$query</em><br />";
+elseif ($db->errno == 1050) {
+	echo '... omitting, table exists.<br />';
+	return;
+} else {
+	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
+	die($query);
+}
 
-if($db->query($query) === TRUE)
-echo 'table successfully created.<br />';
-else
-echo "error creating table: $db->error <br />";
+echo "Add pseudo email addresses for reserved users  ";
+$query = "insert into `user_emails` ( `user_id`, `email` ) values
+	( 1, 'user1@huozr.com' ), 
+	( 2, 'user2@huozr.com' ), 
+	( 3, 'user3@huozr.com' ), 
+	( 4, 'user4@huozr.com' ), 
+	( 5, 'user5@huozr.com' ), 
+	( 6, 'user6@huozr.com' ), 
+	( 7, 'user7@huozr.com' ), 
+	( 8, 'user8@huozr.com' ), 
+	( 9, 'user9@huozr.com' ), 
+	( 10, 'user0@huozr.com' )";
+
+if ($db->query($query) === TRUE)
+	echo "... done<br /><em>$query</em><br />";
+else {
+	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
+	die($query);
+}
+
 

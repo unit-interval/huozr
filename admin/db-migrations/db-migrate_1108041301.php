@@ -3,26 +3,26 @@
 if (! isset($start_including))
 	return;
 
-echo 'Add table "oauth_links"  ';
+echo 'Add table `user_oauth_links`  ';
 
-$table='oauth_links';
-$tables = array(
-	'oauth_links' => array(
-		'col' =>	'`id` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-					`uid` MEDIUMINT NOT NULL ,
-					`service` VARCHAR( 32 ) NOT NULL ,
-					`service_id` VARCHAR( 32 ) NOT NULL ,
-					`token` VARCHAR( 64 ) NOT NULL ,
-					`secret` VARCHAR( 64 ) NOT NULL ,
-					`updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
-	),
-);
+$query = "create table `user_oauth_links` ( 
+	`id` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`user_id` MEDIUMINT NOT NULL ,
+	`service` VARCHAR( 32 ) NOT NULL ,
+	`remote_id` VARCHAR( 32 ) NOT NULL ,
+	`token` VARCHAR( 256 ) NOT NULL ,
+	`secret` VARCHAR( 256 ) NOT NULL ,
+	`updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	index (`user_id`), 
+	unique `service_remote_id` (`service`, `remote_id`) )";
 
-$query = "create table `$table` ( {$tables[$table]['col']} )";
-echo "query: $query <br />";
-
-if($db->query($query) === TRUE)
-echo 'table successfully created.<br />';
-else
-echo "error creating table: $db->error <br />";
+if ($db->query($query) === TRUE)
+	echo "... done<br /><em>$query</em><br />";
+elseif ($db->errno == 1050) {
+	echo '... omitting, table exists.<br />';
+	return;
+} else {
+	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
+	die($query);
+}
 
