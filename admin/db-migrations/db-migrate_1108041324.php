@@ -6,7 +6,7 @@ if (! isset($start_including))
 echo 'Add table `user_basic_auth`  ';
 
 $query = "create table `user_basic_auth` (
-	`id` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`id` mediumint unsigned not null auto_increment primary key,
 	`user_id` MEDIUMINT NOT NULL unique,
 	`login_name` VARCHAR( 32 ) NOT NULL unique,
 	`passwd` CHAR( 32 ) NOT NULL,

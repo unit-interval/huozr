@@ -6,7 +6,7 @@ if (! isset($start_including))
 echo 'Add table `user_oauth_links`  ';
 
 $query = "create table `user_oauth_links` ( 
-	`id` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`id` mediumint unsigned not null auto_increment primary key,
 	`user_id` MEDIUMINT NOT NULL ,
 	`service` VARCHAR( 32 ) NOT NULL ,
 	`remote_id` VARCHAR( 32 ) NOT NULL ,

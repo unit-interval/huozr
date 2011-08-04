@@ -6,7 +6,7 @@ if (! isset($start_including))
 echo 'Add table `user_emails`  ';
 
 $query = "create table `user_emails` ( 
-	`id` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`id` mediumint unsigned not null auto_increment primary key,
 	`user_id` MEDIUMINT NOT NULL ,
 	`email` VARCHAR( 64 ) NOT NULL ,
 	`activated` bool not null default 0,
