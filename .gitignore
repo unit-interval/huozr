@@ -1,2 +1,7 @@
+# project ignored files
+inc/config.local.php
+
+# global ignored files
+*.swp
 .project
 .settings
