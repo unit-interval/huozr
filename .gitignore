@@ -1,4 +1,5 @@
 # project ignored files
+tmp
 inc/config.local.php
 
 # global ignored files

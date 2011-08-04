@@ -12,5 +12,9 @@ define('SESSUSER', 'huozruser');
 define('SESSPROV', 'huozrprov');
 
 /** local settings */
-include DIR_INC . '/config.local.php';
+require DIR_INC . '/config.local.php';
+
+/** include necessary files */
+include DIR_INC . '/functions.php';
+include DIR_INC . '/database.php';	// i think most request contains db access.
 

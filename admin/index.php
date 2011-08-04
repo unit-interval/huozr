@@ -1,6 +1,6 @@
 <?php
 
-include '../config.php'
+include '../config.php';
 
 session_name('huozradmin');
 session_start();
@@ -22,11 +22,19 @@ if ($_SESSION['admin'] != true) {
 	}
 }
 
+if (isset($_GET['cmd'])) {
+	if ($_GET['cmd'] == 'db_migrate') {
+		// do the job
+	} elseif ($_GET['cmd'] == 'db_reset') {
+		if(! $development_env)
+			echo "attention! you're trying to reset the database on a none-development site.";
+		else {
+		}
+	}
+}
 
-
-
-
-
-
-
+echo "<p><hr />
+	<a href='?cmd=db_migrate'>update database structure.</a><br />
+	<a href='?cmd=db_reset'>reset database, drop all tables.</a><br />
+	<br /></p>";
 
