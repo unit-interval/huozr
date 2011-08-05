@@ -15,7 +15,9 @@ define('SESSPROV', 'huozrprov');
 $start_including = true;
 
 /** local settings */
-require DIR_INC . '/config.local.php';
+include DIR_INC . '/config.local.php';
+if ($local_config_ver != '08051037')
+	die('config.local.php has been updated.');
 
 /** include necessary files */
 include DIR_INC . '/functions.php';
