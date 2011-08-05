@@ -23,7 +23,30 @@ if ($_SESSION['admin'] != true) {
 }
 
 if (isset($_GET['cmd'])) {
-	if ($_GET['cmd'] == 'db_migrate') {
+	if ($_GET['cmd'] == 'db_show_tables') {
+		$tables = array();
+		$html = '<table><tr><td>table</td><td>field</td><td>type</td><td>null</td>
+			<td>key</td><td>default</td><td>extra</td></tr>';
+
+		$query = "show tables";
+		if (! ($result = $db->query($query)))
+			die("db error: ($db->errno)$db->error<br />");
+		while($row = $result->fetch_row())
+			$tables[] = $row[0];
+		$result->free();
+		foreach($tables as $t) {
+			$cols = array();
+			$html .= "<tr><td>$t</td></tr>";
+
+			$query = "describe `$t`";
+			if (! ($result = $db->query($query)))
+				die("db error: ($db->errno)$db->error<br />");
+			while($row = $result->fetch_row())
+				$html .= "<tr><td></td><td>{$row[0]}</td><td>{$row[1]}</td><td>{$row[2]}</td>
+				<td>{$row[3]}</td><td>{$row[4]}</td><td>{$row[5]}</td></tr>";
+		}
+		echo $html . "</table>";
+	} elseif ($_GET['cmd'] == 'db_migrate') {
 		foreach(glob('./db-migrations/db-migrate*.php') as $fn)
 			include $fn;
 	} elseif ($_GET['cmd'] == 'db_reset') {
@@ -46,6 +69,7 @@ if (isset($_GET['cmd'])) {
 }
 
 echo "<p><hr />
+	<a href='?cmd=db_show_tables'>show current table structures.</a><br />
 	<a href='?cmd=db_migrate'>update database structure.</a><br />
 	<a href='?cmd=db_reset'>reset database, drop all tables.</a><br />
 	<br /></p>";
