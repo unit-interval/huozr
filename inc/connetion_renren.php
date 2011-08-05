@@ -16,7 +16,7 @@ $config				= new stdClass;
 $config->AUTHORIZEURL = 'https://graph.renren.com/oauth/authorize';  //进行连接授权的地址
 $config->ACCESSTOKENURL = 'https://graph.renren.com/oauth/token'; //获取access token的地址
 $config->SESSIONKEYURL = 'https://graph.renren.com/renren_api/session_key'; //获取session key的地址
-$config->CALLBACK = 'http://gene.shiyiquan.cn/login.php?s=renren'; //回调地址
+$config->CALLBACK = 'http://'.$_SERVER['SERVER_NAME'].'/login.php?s=renren'; //回调地址
 
 $config->APIURL		= 'http://api.renren.com/restserver.do'; //RenRen网的API调用地址
 $config->APIKey		= '3626a6bb44aa4c94833c6f5f7113608b';	//API Key
