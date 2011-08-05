@@ -12,7 +12,7 @@ $query = "create table `BLAH` (
 	`created` timestamp not null default current_timestamp,
 	unique `BLAH` (`BLAH`, `BLAHl`) )";
 
-if ($db->query($query) === TRUE)
+if ($db->rquery($query) === TRUE)
 	echo "... done<br /><em>$query</em><br />";
 elseif ($db->errno == 1050) {
 	echo '... omitting, table exists.<br />';
@@ -20,10 +20,8 @@ elseif ($db->errno == 1050) {
 } elseif ($db->errno == 1060) {
 	echo '... omitting, column exists.<br />';
 	return;
-} else {
-	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
-	die($query);
-}
+} else
+	$db->raise_error();
 
 /** insert seed data */
 
@@ -32,12 +30,8 @@ $query = "insert into `BLAH` ( `BLAH` ) values
 	(default), 
 	(default)";
 
-if ($db->query($query) === TRUE)
-	echo "... done<br /><em>$query</em><br />";
-else {
-	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
-	die($query);
-}
+$db->query($query);
+echo "... done<br /><em>$query</em><br />";
 
 /** update data */
 
@@ -45,10 +39,6 @@ echo "Set values for existing entries  ";
 $query = "update `BLAH` 
 	set `BLAH` = 'BLAH'";
 
-if ($db->query($query) === TRUE)
-	echo "... done<br /><em>$query</em><br />";
-else {
-	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
-	die($query);
-}
+$db->query($query);
+echo "... done<br /><em>$query</em><br />";
 

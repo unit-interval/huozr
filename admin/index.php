@@ -29,8 +29,7 @@ if (isset($_GET['cmd'])) {
 			<td>key</td><td>default</td><td>extra</td></tr>';
 
 		$query = "show tables";
-		if (! ($result = $db->query($query)))
-			die("db error: ($db->errno)$db->error<br />");
+		$result = $db->query($query);
 		while($row = $result->fetch_row())
 			$tables[] = $row[0];
 		$result->free();
@@ -39,8 +38,7 @@ if (isset($_GET['cmd'])) {
 			$html .= "<tr><td>$t</td></tr>";
 
 			$query = "describe `$t`";
-			if (! ($result = $db->query($query)))
-				die("db error: ($db->errno)$db->error<br />");
+			$result = $db->query($query);
 			while($row = $result->fetch_row())
 				$html .= "<tr><td></td><td>{$row[0]}</td><td>{$row[1]}</td><td>{$row[2]}</td>
 				<td>{$row[3]}</td><td>{$row[4]}</td><td>{$row[5]}</td></tr>";
@@ -54,16 +52,12 @@ if (isset($_GET['cmd'])) {
 			echo "attention! you're trying to reset the database on a none-development site.";
 		else {
 			$query = "drop database if exists " . DB_NAME;
-			if($db->query($query) === true)
-				echo "database dropped. <br />";
-			else
-				die("error dropping database: $db->error <br />");
+			$db->query($query);
+			echo "database dropped. <br />";
 			$query = "create database " . DB_NAME . 
 				" character set utf8 collate utf8_general_ci";
-			if($db->query($query) === true)
-				echo "database created. <br />";
-			else
-				die("error creating database: $db->error <br />");
+			$db->query($query);
+			echo "database created. <br />";
 		}
 	}
 }

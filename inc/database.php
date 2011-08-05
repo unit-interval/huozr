@@ -17,11 +17,19 @@ class mysqli_ext extends mysqli {
 		if (!$this->set_charset("utf8"))
 			err_fatal("mysql error: ({$this->errno})$this->error.");
 	}
-	
+	/** preserve the original query method */
+	public function rquery($query) {
+		parent::query($query);
+	}
+	/** exit on error for common queries */
 	public function query($query) {
 		if(!($result = parent::query($query)))
 			err_fatal("mysql error: ({$this->errno})$this->error.");
 		return $result;
+	}
+	/** raise error */
+	public function raise_error() {
+		err_fatal("mysql error: ({$this->errno})$this->error.");
 	}
 }
 
