@@ -12,6 +12,7 @@ function err_fatal($msg) {
 		echo "</pre>";
 		die;
 	}
+// TODO: make error log work on live site.
 	if ($handle = fopen(DIR_ROOT . '/tmp/huozr-error.log', 'a')) {
 		fputcsv($handle, array(date('c'), 'FATAL', $_SERVER['REQUEST_URI'], $msg));
 		fclose($handle);

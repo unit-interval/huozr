@@ -25,4 +25,3 @@ error_reporting(0);
 /** set to true to enable database reset and other development settings */
 define('DEV_ENV', false);
 
-//$debug_mode = true;
