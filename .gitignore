@@ -4,5 +4,6 @@ inc/config.local.php
 
 # global ignored files
 *.swp
+.buildpath
 .project
 .settings

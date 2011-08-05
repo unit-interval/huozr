@@ -1,0 +1,6 @@
+<FilesMatch "\.git\w+$">
+  Order allow,deny
+</FilesMatch>
+
+## private error log
+#php_value error_log ./tmp/php-error.log
