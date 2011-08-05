@@ -4,7 +4,7 @@
  * when changes should be forced to config.local.php
  * edit $local_config_ver below and in the config.php file
  */
-$local_config_ver = '08051037';
+$local_config_ver = '08051637';
 
 /** instance dependent values */
 define('DB_HOST', 'localhost');
@@ -22,7 +22,7 @@ define('SALT_PW', 'Cataclysm');
 //error_reporting(E_ALL ^ E_NOTICE);
 error_reporting(0);
 
-/** set to true to enable database reset */
-$development_env = false;
+/** set to true to enable database reset and other development settings */
+define('DEV_ENV', false);
 
 //$debug_mode = true;

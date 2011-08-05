@@ -50,7 +50,7 @@ if (isset($_GET['cmd'])) {
 		foreach(glob('./db-migrations/db-migrate*.php') as $fn)
 			include $fn;
 	} elseif ($_GET['cmd'] == 'db_reset') {
-		if(! $development_env)
+		if(! DEV_ENV)
 			echo "attention! you're trying to reset the database on a none-development site.";
 		else {
 			$query = "drop database if exists " . DB_NAME;
