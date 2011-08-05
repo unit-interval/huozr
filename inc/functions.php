@@ -3,6 +3,16 @@
 /**
  * error handling
  */
+function err_warn($msg) {
+	if (! DEV_ENV)
+		return;
+	echo "<hr /><p><h3><em>Warning: </em>$msg</h3></p><pre>";
+//	print_r(get_defined_vars());
+//	print_r($_SESSION);
+//	print_r($GLOBALS);
+	echo "</pre>";
+	die;
+}
 function err_fatal($msg) {
 	if (DEV_ENV) {
 		echo "<hr /><p><h3><em>FATAL: </em>$msg</h3></p><pre>";
