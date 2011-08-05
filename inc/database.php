@@ -19,7 +19,7 @@ class mysqli_ext extends mysqli {
 	}
 	/** preserve the original query method */
 	public function rquery($query) {
-		parent::query($query);
+		return parent::query($query);
 	}
 	/** exit on error for common queries */
 	public function query($query) {

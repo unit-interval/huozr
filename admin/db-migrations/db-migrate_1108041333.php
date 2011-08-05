@@ -14,15 +14,16 @@ $query = "create table `user_emails` (
 	`created` timestamp not null default current_timestamp,
 	unique `user_email` (`user_id`, `email`) )";
 
-if ($db->query($query) === TRUE)
+if ($db->rquery($query) === TRUE)
 	echo "... done<br /><em>$query</em><br />";
 elseif ($db->errno == 1050) {
 	echo '... omitting, table exists.<br />';
 	return;
-} else {
-	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
-	die($query);
-}
+} elseif ($db->errno == 1060) {
+	echo '... omitting, column exists.<br />';
+	return;
+} else
+	$db->raise_error();
 
 echo "Add pseudo email addresses for reserved users  ";
 $query = "insert into `user_emails` ( `user_id`, `email` ) values
@@ -37,11 +38,7 @@ $query = "insert into `user_emails` ( `user_id`, `email` ) values
 	( 9, 'user9@huozr.com' ), 
 	( 10, 'user0@huozr.com' )";
 
-if ($db->query($query) === TRUE)
-	echo "... done<br /><em>$query</em><br />";
-else {
-	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
-	die($query);
-}
+$db->query($query);
+echo "... done<br /><em>$query</em><br />";
 
 

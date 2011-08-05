@@ -9,24 +9,20 @@ $query = "ALTER TABLE  `users`
 	ADD  `screen_name` VARCHAR( 32 ) NOT NULL 
 	AFTER  `id`";
 
-if ($db->query($query) === TRUE)
+if ($db->rquery($query) === TRUE)
 	echo "... done<br /><em>$query</em><br />";
-elseif ($db->errno == 1060) {
+elseif ($db->errno == 1050) {
+	echo '... omitting, table exists.<br />';
+	return;
+} elseif ($db->errno == 1060) {
 	echo '... omitting, column exists.<br />';
 	return;
-} else {
-	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
-	die($query);
-}
+} else
+	$db->raise_error();
 
 echo "Set values for existing entries  ";
 $query = "update `users` 
 	set `screen_name` = 'Pseudo User'";
 
-if ($db->query($query) === TRUE)
-	echo "... done<br /><em>$query</em><br />";
-else {
-	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
-	die($query);
-}
-
+$db->query($query);
+echo "... done<br /><em>$query</em><br />";

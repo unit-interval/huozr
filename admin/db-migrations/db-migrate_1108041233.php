@@ -10,15 +10,16 @@ $query = "create table `users` (
 	`last_visited` timestamp not null default 0,
 	`created` timestamp not null default current_timestamp )";
 
-if ($db->query($query) === TRUE)
+if ($db->rquery($query) === TRUE)
 	echo "... done<br /><em>$query</em><br />";
 elseif ($db->errno == 1050) {
 	echo '... omitting, table exists.<br />';
 	return;
-} else {
-	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
-	die($query);
-}
+} elseif ($db->errno == 1060) {
+	echo '... omitting, column exists.<br />';
+	return;
+} else
+	$db->raise_error();
 
 echo "Add 10 reserved users  ";
 $query = "insert into `users` ( `id` ) values
@@ -33,10 +34,6 @@ $query = "insert into `users` ( `id` ) values
 	(default), 
 	(default)";
 
-if ($db->query($query) === TRUE)
-	echo "... done<br /><em>$query</em><br />";
-else {
-	echo "... <strong>error</strong>: ($db->errno)$db->error <br />";
-	die($query);
-}
+$db->query($query);
+echo "... done<br /><em>$query</em><br />";
 
