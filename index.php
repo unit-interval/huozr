@@ -1,13 +1,17 @@
 <?php
 
-include_once './config.php';
-include DIR_INC . '/func-pages.php';
+include './config.php';
+include DIR_INC . '/bootstrap.php';
 
-$css_tags = array('style');
-$js_tags = array('jquery');
-
-include DIR_VIEW . '/head.tpl.php';
-include DIR_VIEW . '/nav.tpl.php';
-include DIR_VIEW . '/index.tpl.php';
-include DIR_VIEW . '/footer.tpl.php';
-
+/** map request to its controller */
+switch (req_path()) {
+	// transitional or raw pages
+	case 'do':
+		break;
+	// ajax
+	case 'xhr':
+		break;
+	// ordinary pages
+	default:
+		include path_ctrl('main');
+}

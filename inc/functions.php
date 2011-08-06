@@ -32,3 +32,41 @@ function err_redir() {
 	header("Location: /error.php");
 	die;
 }
+
+/**
+ * an approach to a limited MVC frame
+ */
+
+/**
+ * DRY,
+ * path_xx functions
+ */
+function path_ctrl($str = '') {
+	static $response_path;
+	if (! $str)
+		return $response_path;
+	$response_path = $str;
+	return DIR_CTRL . "/$str.php";
+}
+function path_view($str) {
+	return DIR_VIEW . "/$str.tpl.php";
+}
+
+/**
+ * generate the entire content if called without param
+ * or a yielding region if called with one region name
+ */
+function yield($region = '') {
+	// use variable variables as a workaround to variable scope
+	global $res;
+	foreach ($res as $k => $v)
+		$$k = $v;
+
+	if ($region) {
+		global $yield_for;
+		$yielding_for = $yield_for[$region];
+		include path_view('_' . $region);
+	} else {
+		include path_view(path_ctrl());
+	}
+}
