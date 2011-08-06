@@ -288,4 +288,78 @@ function user_logout(){
 	session_destroy();
 }
 
+//user login verify, result true or false
+function user_login_verify(){
+	 cookie_auth();
+	 return $_SESSION['logged_in'];
+}
+
+//cookie autorize
+function cookie_auth() {
+	global $db;
+	if(!cookie_verify_hash()) {
+		$_SESSION['logged_in'] = false;
+		return;
+	}
+	$uid = $_COOKIE['uid'];
+ 
+	$query = "select * from `users`
+		where `id` = $uid";
+	if($result = $db->query($query)) {
+		if($result->num_rows === 0) {
+			$_SESSION['logged_in'] = false;
+			setcookie('hash', '', time()-3600);
+			setcookie('uid', '', time()-3600);
+			setcookie('stamp', '', time()-3600);		
+			return;
+		}
+		$user = $result->fetch_assoc();
+		$result->free();
+	}
+	/*	
+	if($_COOKIE['stamp'] <= $user['`stamp`+0']) {
+		$_SESSION['logged_in'] = false;
+		setcookie('hash', '', time()-3600);
+		return;
+	}	
+	$query = "select `pocket`, `amount` from `credit`
+		where `id` = $uid";
+	if($result = $db->query($query)) {
+		$credit = array();
+		while($row = $result->fetch_assoc())
+		$credit[$row['pocket']] = $row['amount'];
+		$result->free();
+	}
+	*/		
+	$_SESSION['logged_in'] = true;
+	$_SESSION['uid'] = $uid;
+	$_SESSION['screen_name'] = $user['screen_name'];
+	cookie_refresh();
+}
+
+//cookie refresh
+function cookie_refresh() {
+	$expire = time()+3600*24*30;
+	foreach($_COOKIE as $key => $value)
+	setcookie($key, $value, $expire);
+}
+// verify cookie hash
+function cookie_verify_hash() {
+	if(!isset($_COOKIE['hash']) || !isset($_COOKIE['uid']) || !isset($_COOKIE['stamp']))
+	return false;
+	$date = date_create();
+	$salt1 = $date->format('Y-M-');
+	$date->modify('-1 month');
+	$salt2 = $date->format('Y-M-');
+	if (($_COOKIE['hash'] == md5($salt1 . $_COOKIE['uid'] . $_COOKIE['stamp'])) ||
+	($_COOKIE['hash'] == md5($salt2 . $_COOKIE['uid'] . $_COOKIE['stamp'])))
+	return true;
+	else {
+		setcookie('hash', '', time()-3600);
+		setcookie('uid', '', time()-3600);
+		setcookie('stamp', '', time()-3600);		
+		return false;
+	}
+}
+
 

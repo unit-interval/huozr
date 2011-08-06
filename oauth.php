@@ -5,7 +5,7 @@ include DIR_INC . '/users_functions.php';
 session_name(SESSUSER);
 session_start();
 
-if($_GET['s']=='renren') {
+if($_GET['s']=='renren') { 
 	if(!isset($_GET['code']) && $_SESSION['renren_state']==1) $_SESSION['renren_state'] = 0;
 	renren_oauth($_GET['code']);
 	if($u = user_openid_auth_exists('renren', $_SESSION['renren_uid'])){
@@ -64,7 +64,6 @@ if($_GET['s']=='renren') {
 		user_login(user_openid_auth(user_create($_SESSION['douban_name']), 'douban', $_SESSION['douban_uid'], $_SESSION['douban_token'], $_SESSION['douban_secret']), FALSE);
 		header('Location: oauth.php?s=home');	
 	}
-	
 }elseif($_POST['s']=='basic'){
 	if($u = user_exists($_POST['username'])){
 		if(md5(SALT_PW . $_POST['passwd']) == $u['passwd']){ 
@@ -76,11 +75,12 @@ if($_GET['s']=='renren') {
 	}else{
 		echo "登录不成功，请重试";
 	}
-}elseif($_GET['s']=='home'){
-	if ($_SESSION['logged_in'] == true){
-		echo '欢迎你，你的 user_id 是'. $_COOKIE['uid'];
+}elseif($_GET['s']=='home'){ //登陆后页面
+	if (user_login_verify()){
+		echo '欢迎回来，你的活字网用户 id 是 '. $_SESSION['uid'] . '，昵称是 '. $_SESSION['screen_name'] .'。';
+		die('<a href="oauth.php?s=logout">【登出】</a>');
 	}else{
-		echo '抱歉，你还没有登录';
+		echo '抱歉，你还没有登录。请选择使用下列方法登录。';
 	}
 
 }else{
@@ -119,11 +119,11 @@ if($_GET['s']=='renren') {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Register</title>
+<title>用活字网账号登录</title>
 </head>
 
 <body>
-<h1>登录－活字网</h1>
+<h1>用活字网账号登录</h1>
 <form id="form1" name="form1" method="post" action="oauth.php">
 	<input type="hidden" name="s" id="s" value="basic" />
   <label>

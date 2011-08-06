@@ -13,11 +13,11 @@ if ($_POST['username']!='')
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Sign up</title>
+<title>注册活字网账号</title>
 </head>
 
 <body>
-<h1>注册－活字网</h1>
+<h1>注册活字网账号</h1>
 
 <form id="form1" name="form1" method="post" action="signup.php">
   <label>
