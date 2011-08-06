@@ -52,7 +52,7 @@ function user_create($n){
 }
 
 
-//set a basic auth link (username and password pair) for a existing user, use: uid, new username, new password
+//set a basic auth link (username and password pair) for a existing user, use: uid, new username, new password, result user_id
 function user_basic_auth($uid, $username, $passwd){
 	global $db;
 	if(user_basic_auth_exists($uid))
@@ -62,9 +62,10 @@ function user_basic_auth($uid, $username, $passwd){
 	'{$db->real_escape_string($username)}',
 	'". md5(SALT_PW . $passwd) ."')";
 	$db->query($query);
+	return $uid;
 }
 
-//set a openid (OAuth) auth link for a existing user, use: uid, service, remote_id, token, secret	
+//set a openid (OAuth) auth link for a existing user, use: uid, service, remote_id, token, secret	, result user_id
 function user_openid_auth($uid, $service, $remote_id, $token, $secret){
 	global $db;
 	if(user_openid_auth_exists($service, $remote_id))
@@ -77,14 +78,15 @@ function user_openid_auth($uid, $service, $remote_id, $token, $secret){
 	'{$db->real_escape_string($secret)}'
 	)";
 	$db->query($query);
+	return $uid;
 }
 
 //create a new user (with basic password auth):use username, password, screen name.
 function user_create_basic($username, $passwd, $screen_name) {
 	if(user_exists($username))
 		die("用户名($username)已注册，请直接登录");
-	user_basic_auth(user_create($screen_name),$username,$passwd);
-	echo "注册成功，转到已登陆页面<br />";
+	user_login(user_basic_auth(user_create($screen_name),$username,$passwd), false);
+	header('Location: oauth.php?s=home');
 }
 
 //verify username exists: use username
@@ -262,3 +264,28 @@ function douban_oauth($oauth_token){
 	
 	}
 }
+
+//login successful (ATTENTION: no authorize in this function)  use: user_id, bool temp_login (if TRUE no cookie )
+function user_login($user_id, $temp_login){
+	$_SESSION['logged_in'] = true;
+	$_SESSION['uid'] = $user_id;
+	if(!$input['pub']) {
+		$expire = time()+3600*24*30;
+		$stamp = date('YmdHis');
+		setcookie('uid', $user_id, $expire);
+		setcookie('stamp', $stamp, $expire);
+		setcookie('hash', md5(date('Y-M-').$user_id.$stamp), $expire);
+	} else
+		setcookie('uid', '', time()-3600);
+}
+
+//login out , no input, no output
+function user_logout(){
+	setcookie('hash', '', time()-3600);
+	setcookie('uid', '', time()-3600);
+	setcookie('stamp', '', time()-3600);
+	$_SESSION = array();
+	session_destroy();
+}
+
+

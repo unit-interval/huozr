@@ -2,6 +2,8 @@
 include 'config.php';
 include DIR_INC . '/users_functions.php';
 
+session_name(SESSUSER);
+session_start();
 
 if ($_POST['username']!='')
 	user_create_basic($_POST['username'], $_POST['passwd'], $_POST['screen_name']);
@@ -35,11 +37,11 @@ if ($_POST['username']!='')
   </label>
 </form>
 <ul>
-	<li><a href="login.php?s=sina_weibo">用新浪微博账号登陆</a></li>
-	<li><a href="login.php?s=renren">用人人网账号登陆</a></li>
-	<li><a href="login.php?s=tencent_weibo">用腾讯微博账号登陆</a></li>
-	<li><a href="login.php?s=douban">用豆瓣账号登陆</a></li>					
-	<li><a href="login.php">用活字网账号登陆</a>（<a href="signup.php">注册活字网账号</a>）</li>
+	<li><a href="oauth.php?s=sina_weibo">用新浪微博账号登录</a></li>
+	<li><a href="oauth.php?s=renren">用人人网账号登录</a></li>
+	<li><a href="oauth.php?s=tencent_weibo">用腾讯微博账号登录</a></li>		
+	<li><a href="oauth.php?s=douban">用豆瓣账号登录</a></li>			
+	<li><a href="oauth.php">用活字网账号登录</a>（<a href="signup.php">注册活字网账号</a>）</li>
 </ul>
 </body>
 </html>
