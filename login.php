@@ -41,6 +41,20 @@ if($_GET['s']=='renren') {
 		echo '你好'. $_SESSION['qqwb_name'] . '，欢迎来到活字网，你已经用腾讯微博初次登陆成功。';
 		// 转入登陆后页面
 	}
+}elseif($_GET['s']=='douban'){
+	
+	if(!isset($_GET['oauth_token']) && $_SESSION['douban_state']==1) $_SESSION['douban_state'] = 0;
+	douban_oauth($_GET['oauth_token']);
+	if($u = user_openid_auth_exists('douban', $_SESSION['douban_uid'])){
+		echo '你好，豆瓣上的 '  . $_SESSION['douban_name'] . ' 用户（也就是您）已经绑定过本网站的帐户，在本网站的 id 是' . $u['user_id'] . '，欢迎回来！';
+		// 转入登陆后页面
+	}else{
+		//echo $_SESSION['douban_name'].'<br />'.$_SESSION['douban_uid'].'<br />'.$_SESSION['douban_token'].'<br />'.$_SESSION['douban_secret'];		
+		user_openid_auth(user_create($_SESSION['douban_name']), 'douban', $_SESSION['douban_uid'], $_SESSION['douban_token'], $_SESSION['douban_secret']);
+		echo '你好'. $_SESSION['douban_name'] . '，欢迎来到活字网，你已经用豆瓣账号初次登陆成功。';
+		// 转入登陆后页面
+	}
+	
 }elseif($_POST['s']=='basic'){
 	if($u = user_exists($_POST['username'])){
 		if(md5(SALT_PW . $_POST['passwd']) == $u['passwd']){ 
@@ -50,6 +64,8 @@ if($_GET['s']=='renren') {
 		echo "登陆不成功，请重试";
 	}
 }else{
+
+	/* debug
 	$_SESSION['sinawb_state'] = 0;
 	$_SESSION['sinawb_token'] = 0;
 	$_SESSION['sinawb_secret'] = 0;
@@ -65,7 +81,7 @@ if($_GET['s']=='renren') {
 	$_SESSION['qqwb_secret'] = 0;
 	$_SESSION['qqwb_uid'] = 0;	
 	$_SESSION['qqwb_name'] = 0;	
-	/*
+	$_SESSION['douban_state'] = 0;	
 	$query ="select * from `users` where `id` = 13";
 	$result = $db->query($query);
 	if ($result->num_rows > 0) {
@@ -106,6 +122,7 @@ if($_GET['s']=='renren') {
 	<li><a href="login.php?s=sina_weibo">用新浪微博账号登陆</a></li>
 	<li><a href="login.php?s=renren">用人人网账号登陆</a></li>
 	<li><a href="login.php?s=tencent_weibo">用腾讯微博账号登陆</a></li>		
+	<li><a href="login.php?s=douban">用豆瓣账号登陆</a></li>			
 	<li><a href="login.php">用活字网账号登陆</a>（<a href="signup.php">注册活字网账号</a>）</li>
 </ul>
 </body>

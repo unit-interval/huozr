@@ -22,6 +22,15 @@ define('QQWB_AUTH_URL' , 'https://open.t.qq.com/cgi-bin/authorize');
 define('QQWB_ACC_URL' , 'https://open.t.qq.com/cgi-bin/access_token');
 define('QQWB_CB_URL' , 'http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"]);
 
+//douban API
+define('DOUBAN_AKEY' , '007bc48b65d62ad001734da231828070' );
+define('DOUBAN_SKEY' , '973ceebd6cfcf878' );
+define('DOUBAN_API_BASE', 'http://api.douban.com/');
+define('DOUBAN_REQ_URL' , 'http://www.douban.com/service/auth/request_token');
+define('DOUBAN_AUTH_URL' , 'http://www.douban.com/service/auth/authorize');
+define('DOUBAN_ACC_URL' , 'http://www.douban.com/service/auth/access_token');
+define('DOUBAN_CB_URL' , 'http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"]);
+
 require_once(DIR_INC . '/connetion_renren.php');
 /* 不用下列常量，转用人人 SDK
 define('RENREN_AKEY','3626a6bb44aa4c94833c6f5f7113608b');
@@ -187,16 +196,18 @@ function tencent_weibo_oauth($oauth_token){
 	try {
 		$oauth = new OAuth(QQWB_AKEY, QQWB_SKEY);
 		$oauth->enableDebug();
-		$oauth->setAuthType(oauth_urlencode(OAUTH_AUTH_TYPE_URI));
+		//腾讯的独到之处
+		$oauth->setNonce(md5(rand()));
+		$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);
 		if(!isset($oauth_token) && !$_SESSION['qqwb_state']) {
-			$request_token = $oauth->getRequestToken(oauth_urlencode(QQWB_REQ_URL),oauth_urlencode(QQWB_CB_URL));
+			$request_token = $oauth->getRequestToken(QQWB_REQ_URL,QQWB_CB_URL);
 			$_SESSION['qqwb_secret'] = $request_token['oauth_token_secret'];
 			$_SESSION['qqwb_state'] = 1;
-			header('Location: ' . QQWB_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . oauth_urlencode(QQWB_CB_URL) . '&display=page');
+			header('Location: ' . QQWB_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . QQWB_CB_URL . '&display=page');
 			exit;
 		} elseif($_SESSION['qqwb_state']==1) {
 			$oauth->setToken($oauth_token,$_SESSION['qqwb_secret']);
-			$access_token = $oauth->getAccessToken(oauth_urlencode(QQWB_ACC_URL));
+			$access_token = $oauth->getAccessToken(QQWB_ACC_URL);
 			$_SESSION['qqwb_token'] = $access_token['oauth_token'];
 			$_SESSION['qqwb_secret'] = $access_token['oauth_token_secret'];
 			//$_SESSION['qqwb_uid'] = $access_token['user_id'];
@@ -211,6 +222,42 @@ function tencent_weibo_oauth($oauth_token){
 
 	} catch(OAuthException $E) {
 		echo '<a href="login.php?s=tencent_weibo">An error occurred, please retry.<a>';
+		print_r($E);
+	
+	}
+}
+
+//douban oauth,result: setup related session.
+
+function douban_oauth($oauth_token){
+	try {
+		$oauth = new OAuth(DOUBAN_AKEY, DOUBAN_SKEY);
+		$oauth->enableDebug();
+		if(!isset($oauth_token) && !$_SESSION['douban_state']) {
+			$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);		
+			$request_token = $oauth->getRequestToken(DOUBAN_REQ_URL);
+			$_SESSION['douban_secret'] = $request_token['oauth_token_secret'];
+			$_SESSION['douban_state'] = 1;
+			header('Location: ' . DOUBAN_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . rawurlencode(DOUBAN_CB_URL) . '&display=page');
+			exit;
+		} elseif($_SESSION['douban_state']==1) {
+			$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);		
+			$oauth->setToken($oauth_token,$_SESSION['douban_secret']);
+			$access_token = $oauth->getAccessToken(DOUBAN_ACC_URL);
+			$_SESSION['douban_token'] = $access_token['oauth_token'];
+			$_SESSION['douban_secret'] = $access_token['oauth_token_secret'];
+			//$_SESSION['douban_uid'] = $access_token['user_id'];
+			$oauth->setToken($_SESSION['douban_token'],$_SESSION['douban_secret']);
+			$oauth->fetch(DOUBAN_API_BASE . 'people/%40me',array("alt" => "json"));
+			$json = json_decode($oauth->getLastResponse(), true);
+			//print_r($json);
+			$_SESSION['douban_name'] = $json['title']['$t'];
+			$_SESSION['douban_uid'] = $json['db:uid']['$t'];
+			$_SESSION['douban_state'] = 2;
+		}
+
+	} catch(OAuthException $E) {
+		echo '<a href="login.php?s=douban">An error occurred, please retry.<a>';
 		print_r($E);
 	
 	}
