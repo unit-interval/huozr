@@ -8,6 +8,8 @@ date_default_timezone_set('Asia/Hong_Kong');
 /** PATH */
 define('DIR_ROOT', dirname(__FILE__));
 define('DIR_INC', DIR_ROOT . '/inc');
+define('DIR_MEDIA', DIR_ROOT . '/media');
+define('DIR_VIEW', DIR_INC . '/views');
 
 /** cookie session */
 define('SESSUSER', 'huozruser');
