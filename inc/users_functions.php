@@ -22,6 +22,15 @@ define('QQWB_AUTH_URL' , 'https://open.t.qq.com/cgi-bin/authorize');
 define('QQWB_ACC_URL' , 'https://open.t.qq.com/cgi-bin/access_token');
 define('QQWB_CB_URL' , 'http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"]);
 
+//douban API
+define('DOUBAN_AKEY' , '007bc48b65d62ad001734da231828070' );
+define('DOUBAN_SKEY' , '973ceebd6cfcf878' );
+define('DOUBAN_API_BASE', 'http://api.douban.com/');
+define('DOUBAN_REQ_URL' , 'http://www.douban.com/service/auth/request_token');
+define('DOUBAN_AUTH_URL' , 'http://www.douban.com/service/auth/authorize');
+define('DOUBAN_ACC_URL' , 'http://www.douban.com/service/auth/access_token');
+define('DOUBAN_CB_URL' , 'http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"]);
+
 require_once(DIR_INC . '/connetion_renren.php');
 /* 不用下列常量，转用人人 SDK
 define('RENREN_AKEY','3626a6bb44aa4c94833c6f5f7113608b');
@@ -43,7 +52,7 @@ function user_create($n){
 }
 
 
-//set a basic auth link (username and password pair) for a existing user, use: uid, new username, new password
+//set a basic auth link (username and password pair) for a existing user, use: uid, new username, new password, result user_id
 function user_basic_auth($uid, $username, $passwd){
 	global $db;
 	if(user_basic_auth_exists($uid))
@@ -53,9 +62,10 @@ function user_basic_auth($uid, $username, $passwd){
 	'{$db->real_escape_string($username)}',
 	'". md5(SALT_PW . $passwd) ."')";
 	$db->query($query);
+	return $uid;
 }
 
-//set a openid (OAuth) auth link for a existing user, use: uid, service, remote_id, token, secret	
+//set a openid (OAuth) auth link for a existing user, use: uid, service, remote_id, token, secret	, result user_id
 function user_openid_auth($uid, $service, $remote_id, $token, $secret){
 	global $db;
 	if(user_openid_auth_exists($service, $remote_id))
@@ -68,14 +78,15 @@ function user_openid_auth($uid, $service, $remote_id, $token, $secret){
 	'{$db->real_escape_string($secret)}'
 	)";
 	$db->query($query);
+	return $uid;
 }
 
 //create a new user (with basic password auth):use username, password, screen name.
 function user_create_basic($username, $passwd, $screen_name) {
 	if(user_exists($username))
 		die("用户名($username)已注册，请直接登录");
-	user_basic_auth(user_create($screen_name),$username,$passwd);
-	echo "注册成功，转到已登陆页面<br />";
+	user_login(user_basic_auth(user_create($screen_name),$username,$passwd), false);
+	header('Location: oauth.php?s=home');
 }
 
 //verify username exists: use username
@@ -187,16 +198,18 @@ function tencent_weibo_oauth($oauth_token){
 	try {
 		$oauth = new OAuth(QQWB_AKEY, QQWB_SKEY);
 		$oauth->enableDebug();
-		$oauth->setAuthType(oauth_urlencode(OAUTH_AUTH_TYPE_URI));
+		//腾讯的独到之处
+		$oauth->setNonce(md5(rand()));
+		$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);
 		if(!isset($oauth_token) && !$_SESSION['qqwb_state']) {
-			$request_token = $oauth->getRequestToken(oauth_urlencode(QQWB_REQ_URL),oauth_urlencode(QQWB_CB_URL));
+			$request_token = $oauth->getRequestToken(QQWB_REQ_URL,QQWB_CB_URL);
 			$_SESSION['qqwb_secret'] = $request_token['oauth_token_secret'];
 			$_SESSION['qqwb_state'] = 1;
-			header('Location: ' . QQWB_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . oauth_urlencode(QQWB_CB_URL) . '&display=page');
+			header('Location: ' . QQWB_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . QQWB_CB_URL . '&display=page');
 			exit;
 		} elseif($_SESSION['qqwb_state']==1) {
 			$oauth->setToken($oauth_token,$_SESSION['qqwb_secret']);
-			$access_token = $oauth->getAccessToken(oauth_urlencode(QQWB_ACC_URL));
+			$access_token = $oauth->getAccessToken(QQWB_ACC_URL);
 			$_SESSION['qqwb_token'] = $access_token['oauth_token'];
 			$_SESSION['qqwb_secret'] = $access_token['oauth_token_secret'];
 			//$_SESSION['qqwb_uid'] = $access_token['user_id'];
@@ -215,3 +228,138 @@ function tencent_weibo_oauth($oauth_token){
 	
 	}
 }
+
+//douban oauth,result: setup related session.
+
+function douban_oauth($oauth_token){
+	try {
+		$oauth = new OAuth(DOUBAN_AKEY, DOUBAN_SKEY);
+		$oauth->enableDebug();
+		if(!isset($oauth_token) && !$_SESSION['douban_state']) {
+			$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);		
+			$request_token = $oauth->getRequestToken(DOUBAN_REQ_URL);
+			$_SESSION['douban_secret'] = $request_token['oauth_token_secret'];
+			$_SESSION['douban_state'] = 1;
+			header('Location: ' . DOUBAN_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . rawurlencode(DOUBAN_CB_URL) . '&display=page');
+			exit;
+		} elseif($_SESSION['douban_state']==1) {
+			$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);		
+			$oauth->setToken($oauth_token,$_SESSION['douban_secret']);
+			$access_token = $oauth->getAccessToken(DOUBAN_ACC_URL);
+			$_SESSION['douban_token'] = $access_token['oauth_token'];
+			$_SESSION['douban_secret'] = $access_token['oauth_token_secret'];
+			//$_SESSION['douban_uid'] = $access_token['user_id'];
+			$oauth->setToken($_SESSION['douban_token'],$_SESSION['douban_secret']);
+			$oauth->fetch(DOUBAN_API_BASE . 'people/%40me',array("alt" => "json"));
+			$json = json_decode($oauth->getLastResponse(), true);
+			//print_r($json);
+			$_SESSION['douban_name'] = $json['title']['$t'];
+			$_SESSION['douban_uid'] = $json['db:uid']['$t'];
+			$_SESSION['douban_state'] = 2;
+		}
+
+	} catch(OAuthException $E) {
+		echo '<a href="login.php?s=douban">An error occurred, please retry.<a>';
+		print_r($E);
+	
+	}
+}
+
+//login successful (ATTENTION: no authorize in this function)  use: user_id, bool temp_login (if TRUE no cookie )
+function user_login($user_id, $temp_login){
+	$_SESSION['logged_in'] = true;
+	$_SESSION['uid'] = $user_id;
+	if(!$input['pub']) {
+		$expire = time()+3600*24*30;
+		$stamp = date('YmdHis');
+		setcookie('uid', $user_id, $expire);
+		setcookie('stamp', $stamp, $expire);
+		setcookie('hash', md5(date('Y-M-').$user_id.$stamp), $expire);
+	} else
+		setcookie('uid', '', time()-3600);
+}
+
+//login out , no input, no output
+function user_logout(){
+	setcookie('hash', '', time()-3600);
+	setcookie('uid', '', time()-3600);
+	setcookie('stamp', '', time()-3600);
+	$_SESSION = array();
+	session_destroy();
+}
+
+//user login verify, result true or false
+function user_login_verify(){
+	 cookie_auth();
+	 return $_SESSION['logged_in'];
+}
+
+//cookie autorize
+function cookie_auth() {
+	global $db;
+	if(!cookie_verify_hash()) {
+		$_SESSION['logged_in'] = false;
+		return;
+	}
+	$uid = $_COOKIE['uid'];
+ 
+	$query = "select * from `users`
+		where `id` = $uid";
+	if($result = $db->query($query)) {
+		if($result->num_rows === 0) {
+			$_SESSION['logged_in'] = false;
+			setcookie('hash', '', time()-3600);
+			setcookie('uid', '', time()-3600);
+			setcookie('stamp', '', time()-3600);		
+			return;
+		}
+		$user = $result->fetch_assoc();
+		$result->free();
+	}
+	/*	
+	if($_COOKIE['stamp'] <= $user['`stamp`+0']) {
+		$_SESSION['logged_in'] = false;
+		setcookie('hash', '', time()-3600);
+		return;
+	}	
+	$query = "select `pocket`, `amount` from `credit`
+		where `id` = $uid";
+	if($result = $db->query($query)) {
+		$credit = array();
+		while($row = $result->fetch_assoc())
+		$credit[$row['pocket']] = $row['amount'];
+		$result->free();
+	}
+	*/		
+	$_SESSION['logged_in'] = true;
+	$_SESSION['uid'] = $uid;
+	$_SESSION['screen_name'] = $user['screen_name'];
+	cookie_refresh();
+}
+
+//cookie refresh
+function cookie_refresh() {
+	$expire = time()+3600*24*30;
+	foreach($_COOKIE as $key => $value)
+	setcookie($key, $value, $expire);
+}
+// verify cookie hash
+function cookie_verify_hash() {
+	if(!isset($_COOKIE['hash']) || !isset($_COOKIE['uid']) || !isset($_COOKIE['stamp']))
+	return false;
+	$date = date_create();
+	$salt1 = $date->format('Y-M-');
+	$date->modify('-1 month');
+	$salt2 = $date->format('Y-M-');
+	if (($_COOKIE['hash'] == md5($salt1 . $_COOKIE['uid'] . $_COOKIE['stamp'])) ||
+	($_COOKIE['hash'] == md5($salt2 . $_COOKIE['uid'] . $_COOKIE['stamp'])))
+	return true;
+	else {
+		setcookie('hash', '', time()-3600);
+		setcookie('uid', '', time()-3600);
+		setcookie('stamp', '', time()-3600);		
+		return false;
+	}
+}
+
+
