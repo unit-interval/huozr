@@ -29,44 +29,52 @@ function err_fatal($msg) {
 	err_redir();
 }
 function err_redir() {
-	header("Location: /error.php");
+	header("Location: /error");
 	die;
 }
 
 /**
- * an approach to a limited MVC frame
+ * cache the request string and output the controller file path
+ * works in 5 modes:
+ * 0 - (default) return previous/current controller file path
+ * 1 - mode 0 plus pushing current request into the cache
+ * 2 - output the request string, not the controller file path
+ * 3 - translate $str to it's controller file path
+ * 4 - mode 3 plus replacing the cache with current request
  */
+function path_ctrl($str = '', $m = 0) {
+	static $cache = '';
+	if (! $str)	// in mode 0/2
+		return ($m == 2 ? $cache : DIR_CTRL . "/$cache.php");
 
-/**
- * DRY,
- * path_xx functions
- */
-function path_ctrl($str = '') {
-	static $response_path;
-	if (! $str)
-		return $response_path;
-	$response_path = $str;
+	switch ($m) {
+	case 0:
+		if ($cache)
+			$str = "$cache/$str";
+		break;
+	case 1:
+		$cache = $cache ? "$cache/$str" : $str;
+		$str = $cache
+		break;
+	case 2:
+		if ($cache)
+			$str = "$cache/$str";
+		return $str;
+		break;
+	case 3:
+		return DIR_CTRL . "/$str.php";
+		break;
+	case 4:
+		$cache = $str;
+		return DIR_CTRL . "/$str.php";
+		break;
+	}
 	return DIR_CTRL . "/$str.php";
 }
+/**
+ * translate $str to it's view file path
+ */
 function path_view($str) {
 	return DIR_VIEW . "/$str.tpl.php";
 }
 
-/**
- * generate the entire content if called without param
- * or a yielding region if called with one region name
- */
-function yield($region = '') {
-	// use variable variables as a workaround to variable scope
-	global $res;
-	foreach ($res as $k => $v)
-		$$k = $v;
-
-	if ($region) {
-		global $yield_for;
-		$yielding_for = $yield_for[$region];
-		include path_view('_' . $region);
-	} else {
-		include path_view(path_ctrl());
-	}
-}

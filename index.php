@@ -13,5 +13,5 @@ switch (req_path()) {
 		break;
 	// ordinary pages
 	default:
-		include path_ctrl('main');
+		include path_ctrl('_main', 2);
 }

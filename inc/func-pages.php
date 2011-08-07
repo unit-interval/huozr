@@ -72,3 +72,43 @@ function js_script_tags() {
 	}
 }
 
+/**
+ * add accepted sub requests
+ * or check if request is accecpted
+ */
+function accepts() {
+	static $accepted = array();
+	if (func_get_arg(0) == '-') {
+		foreach($accepted as $pattern) {
+			if(preg_match($pattern, func_get_arg(1)))
+				return true;
+		}
+		return false;
+	}
+	$numargs = func_num_args();
+	for($i = 0; $i < $numargs; $i++) {
+		$pattern = func_get_arg($i);
+		if (preg_match('/^[0-9A-Za-z]/', $pattern))
+			$pattern = "/^$pattern\$/";
+		$accepted[] = $pattern;
+	}
+}
+/**
+ * generate the entire content if called without param
+ * or a yielding region if called with one region name
+ */
+function yield($region = '') {
+	// use variable variables as a workaround to variable scope
+	global $res;
+	foreach ($res as $k => $v)
+		$$k = $v;
+
+	if ($region) {
+		global $yield_for;
+		$yielding_for = $yield_for[$region];
+		include path_view('_' . $region);
+	} else {
+		include path_view(path_ctrl(null, 2));
+	}
+}
+

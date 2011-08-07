@@ -8,6 +8,7 @@
 
 Options -Indexes +FollowSymLinks
 DirectoryIndex index.php index.html index.htm
+ErrorDocument 403 /error/403
 
 ## private error log
 ## defaults to use apache error log
