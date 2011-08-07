@@ -150,6 +150,7 @@ function renren_oauth($code){
 				$renren['remote_id']=$user['uid'];
 				$renren['remote_screen_name']=$user['name'];
 			}
+			unset ($_SESSION['renren_state']);
 			return $renren;
 		}
 
@@ -184,6 +185,8 @@ function sina_weibo_oauth($oauth_token){
 			$oauth->fetch(SINAWB_API_BASE . 'account/verify_credentials.json');
 			$json = json_decode($oauth->getLastResponse(), true);
 			$sinawb['remote_screen_name'] = $json['name'];
+			unset ($_SESSION['sinawb_state']);
+			unset ($_SESSION['sinawb_secret']);
 			return $sinawb;
 		}
 
@@ -222,6 +225,8 @@ function tencent_weibo_oauth($oauth_token){
 			$json = json_decode($oauth->getLastResponse(), true);
 			$qqwb['remote_id'] = $json['data']['name'];
 			$qqwb['remote_screen_name'] = $json['data']['nick'];
+			unset ($_SESSION['qqwb_state']);
+			unset ($_SESSION['qqwb_secret']);			
 			return $qqwb;
 		}
 	} catch(OAuthException $E) {
@@ -256,6 +261,8 @@ function douban_oauth($oauth_token){
 			$json = json_decode($oauth->getLastResponse(), true);
 			$douban['remote_screen_name'] = $json['title']['$t'];
 			$douban['remote_id'] = $json['db:uid']['$t'];
+			unset ($_SESSION['douban_state']);
+			unset ($_SESSION['douban_secret']);			
 			return $douban;
 		}
 	} catch(OAuthException $E) {

@@ -60,7 +60,7 @@ if($_GET['s']=='renren') {
 		header('Location: /login');
 		die();
 	}
-	if($u = user_openid_auth_exists('douban', $douban['remote_uid'])){
+	if($u = user_openid_auth_exists('douban', $douban['remote_id'])){
 		//转入登录后页面
 		user_login($u['user_id'], FALSE);
 		header('Location: home');
