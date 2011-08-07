@@ -84,8 +84,9 @@ if($_GET['s']=='renren') {
 	}
 	
 	
-	
-	
+}elseif($_POST['s']=='signup'){
+	if ($_POST['username']!='')
+		user_create_basic($_POST['username'], $_POST['passwd'], $_POST['screen_name']);
 
 
 

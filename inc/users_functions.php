@@ -86,7 +86,7 @@ function user_create_basic($username, $passwd, $screen_name) {
 	if(user_exists($username))
 		die("用户名($username)已注册，请直接登录");
 	user_login(user_basic_auth(user_create($screen_name),$username,$passwd), false);
-	header('Location: oauth.php?s=home');
+	header('Location: home');
 }
 
 //verify username exists: use username

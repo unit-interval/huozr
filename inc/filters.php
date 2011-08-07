@@ -10,7 +10,9 @@ function do_filter($fil) {
 		$exclude = array(
 			'/$',
 			'/login(/|$)',
-			'/404$'
+			'/signup(/|$)',			
+			'/404$',
+			'/oauth(/|$)'
 		);
 
 		$req = strtok($_SERVER['REQUEST_URI'], '?');
