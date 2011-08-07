@@ -23,4 +23,5 @@ include DIR_INC . '/config.local.php';
 if ($local_config_ver != '08051637')
 	die('config.local.php was updated / not found.');
 unset($local_config_var);
+include DIR_INC . '/config.keys.php';
 

@@ -5,6 +5,9 @@
 <FilesMatch "\.git\w+$">
   Order allow,deny
 </FilesMatch>
+<Files config.php>
+  Order allow,deny
+</Files>
 
 Options -Indexes +FollowSymLinks
 DirectoryIndex index.php index.html index.htm
