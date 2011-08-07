@@ -128,7 +128,7 @@ function user_openid_auth_exists($service, $remote_id){
 	return false;
 }
 
-//renren_connection, result: setup related session.
+//renren_connection, result: array with token, secret, remote_id, remote_screen_name.
 
 function renren_oauth($code){
 	$oauth = new RenRenOauth();
@@ -139,17 +139,18 @@ function renren_oauth($code){
 			header('Location: ' . $oauth->getAuthorizeUrl());
 			exit;
 		} elseif($_SESSION['renren_state']==1) {
+			$renren = array();
 			$token = $oauth->getAccessToken($code);
 			$key = $oauth->getSessionKey($token['access_token']);			
 			$client->setSessionKey($key['renren_token']['session_key']);
-			$_SESSION['renren_token'] = $token['access_token'];
-			$_SESSION['renren_secret'] = $key['renren_token']['session_key'];			
+			$renren['token'] = $token['access_token'];
+			$renren['secret'] = $key['renren_token']['session_key'];			
 			$users=$client->POST('users.getInfo','uid,name');
 			foreach($users as $user) {
-				$_SESSION['renren_uid']=$user['uid'];
-				$_SESSION['renren_name']=$user['name'];
+				$renren['remote_id']=$user['uid'];
+				$renren['remote_screen_name']=$user['name'];
 			}
-			$_SESSION['renren_state'] = 2;
+			return $renren;
 		}
 
 
@@ -160,7 +161,7 @@ function renren_oauth($code){
 
 }
 
-//sina weibo oauth,result: setup related session.
+//sina weibo oauth,result: array with token, secret, remote_id, remote_screen_name.
 
 function sina_weibo_oauth($oauth_token){
 	try {
@@ -173,16 +174,17 @@ function sina_weibo_oauth($oauth_token){
 			header('Location: ' . SINAWB_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . rawurlencode(SINAWB_CB_URL) . '&display=page');
 			exit;
 		} elseif($_SESSION['sinawb_state']==1) {
+			$sinawb = array();
 			$oauth->setToken($oauth_token,$_SESSION['sinawb_secret']);
 			$access_token = $oauth->getAccessToken(SINAWB_ACC_URL);
-			$_SESSION['sinawb_token'] = $access_token['oauth_token'];
-			$_SESSION['sinawb_secret'] = $access_token['oauth_token_secret'];
-			$_SESSION['sinawb_uid'] = $access_token['user_id'];
-			$oauth->setToken($_SESSION['sinawb_token'],$_SESSION['sinawb_secret']);
+			$sinawb['token'] = $access_token['oauth_token'];
+			$sinawb['secret'] = $access_token['oauth_token_secret'];
+			$sinawb['remote_id'] = $access_token['user_id'];
+			$oauth->setToken($sinawb['token'],$sinawb['secret']);
 			$oauth->fetch(SINAWB_API_BASE . 'account/verify_credentials.json');
 			$json = json_decode($oauth->getLastResponse(), true);
-			$_SESSION['sinawb_name'] = $json['name'];
-			$_SESSION['sinawb_state'] = 2;
+			$sinawb['remote_screen_name'] = $json['name'];
+			return $sinawb;
 		}
 
 	} catch(OAuthException $E) {
@@ -192,7 +194,7 @@ function sina_weibo_oauth($oauth_token){
 	}
 }
 
-//tencent weibo oauth,result: setup related session.
+//tencent weibo oauth,result: array with token, secret, remote_id, remote_screen_name.
 
 function tencent_weibo_oauth($oauth_token){
 	try {
@@ -201,6 +203,7 @@ function tencent_weibo_oauth($oauth_token){
 		//腾讯的独到之处
 		$oauth->setNonce(md5(rand()));
 		$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);
+		//
 		if(!isset($oauth_token) && !$_SESSION['qqwb_state']) {
 			$request_token = $oauth->getRequestToken(QQWB_REQ_URL,QQWB_CB_URL);
 			$_SESSION['qqwb_secret'] = $request_token['oauth_token_secret'];
@@ -208,20 +211,19 @@ function tencent_weibo_oauth($oauth_token){
 			header('Location: ' . QQWB_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . QQWB_CB_URL . '&display=page');
 			exit;
 		} elseif($_SESSION['qqwb_state']==1) {
+			$qqwb = array();
 			$oauth->setToken($oauth_token,$_SESSION['qqwb_secret']);
 			$access_token = $oauth->getAccessToken(QQWB_ACC_URL);
-			$_SESSION['qqwb_token'] = $access_token['oauth_token'];
-			$_SESSION['qqwb_secret'] = $access_token['oauth_token_secret'];
+			$qqwb['token'] = $access_token['oauth_token'];
+			$qqwb['secret'] = $access_token['oauth_token_secret'];
 			//$_SESSION['qqwb_uid'] = $access_token['user_id'];
-			$oauth->setToken($_SESSION['qqwb_token'],$_SESSION['qqwb_secret']);
+			$oauth->setToken($qqwb['token'],$qqwb['secret']);
 			$oauth->fetch('http://open.t.qq.com/api/user/info');
 			$json = json_decode($oauth->getLastResponse(), true);
-			$_SESSION['qqwb_uid'] = $json['data']['name'];
-			$_SESSION['qqwb_name'] = $json['data']['nick'];
-			$_SESSION['qqwb_state'] = 2;
+			$qqwb['remote_id'] = $json['data']['name'];
+			$qqwb['remote_screen_name'] = $json['data']['nick'];
+			return $qqwb;
 		}
-
-
 	} catch(OAuthException $E) {
 		echo '<a href="login.php?s=tencent_weibo">An error occurred, please retry.<a>';
 		print_r($E);
@@ -229,7 +231,7 @@ function tencent_weibo_oauth($oauth_token){
 	}
 }
 
-//douban oauth,result: setup related session.
+//douban oauth,result: array with token, secret, remote_id, remote_screen_name.
 
 function douban_oauth($oauth_token){
 	try {
@@ -243,24 +245,22 @@ function douban_oauth($oauth_token){
 			header('Location: ' . DOUBAN_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . rawurlencode(DOUBAN_CB_URL) . '&display=page');
 			exit;
 		} elseif($_SESSION['douban_state']==1) {
+			$douban = array();
 			$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);		
 			$oauth->setToken($oauth_token,$_SESSION['douban_secret']);
 			$access_token = $oauth->getAccessToken(DOUBAN_ACC_URL);
-			$_SESSION['douban_token'] = $access_token['oauth_token'];
-			$_SESSION['douban_secret'] = $access_token['oauth_token_secret'];
-			//$_SESSION['douban_uid'] = $access_token['user_id'];
-			$oauth->setToken($_SESSION['douban_token'],$_SESSION['douban_secret']);
+			$douban['token'] = $access_token['oauth_token'];
+			$douban['secret'] = $access_token['oauth_token_secret'];
+			$oauth->setToken($douban['token'],$douban['secret']);
 			$oauth->fetch(DOUBAN_API_BASE . 'people/%40me',array("alt" => "json"));
 			$json = json_decode($oauth->getLastResponse(), true);
-			//print_r($json);
-			$_SESSION['douban_name'] = $json['title']['$t'];
-			$_SESSION['douban_uid'] = $json['db:uid']['$t'];
-			$_SESSION['douban_state'] = 2;
+			$douban['remote_screen_name'] = $json['title']['$t'];
+			$douban['remote_id'] = $json['db:uid']['$t'];
+			return $douban;
 		}
-
 	} catch(OAuthException $E) {
-		echo '<a href="login.php?s=douban">An error occurred, please retry.<a>';
-		print_r($E);
+		//echo '<a href="login.php?s=douban">An error occurred, please retry.<a>';
+		//print_r($E);
 	
 	}
 }
@@ -272,15 +272,14 @@ function user_login($user_id, $temp_login){
 		where `id` = $user_id";
 	if($result = $db->query($query)) {
 		if($result->num_rows === 0) {
-			$_SESSION['logged_in'] = false; //登录失败！ 	
+			$_SESSION['u_id'] = ''; //登录失败！ 	
 			return;
 		}
 		$user = $result->fetch_assoc();
 		$result->free();
 	}
-	$_SESSION['logged_in'] = true;
-	$_SESSION['uid'] = $user_id;
-	$_SESSION['screen_name'] = $user['screen_name'];	
+	$_SESSION['u_id'] = $user_id;
+	$_SESSION['u_screen_name'] = $user['screen_name'];	
 	if(!$temp_login) {
 		$expire = time()+3600*24*30;
 		$stamp = date('YmdHis');
@@ -296,17 +295,17 @@ function user_logout(){
 	setcookie('hash', '', time()-3600);
 	setcookie('uid', '', time()-3600);
 	setcookie('stamp', '', time()-3600);
-	$_SESSION = array();
-	session_destroy();
+	unset ($_SESSION['u_id']);
+	unset ($_SESSION['u_screen_name']);
 }
 
 //user login verify, result true or false
 function user_login_verify(){
-	if($_SESSION['logged_in']){
-		return $_SESSION['logged_in'];		
+	if($_SESSION['u_id']){
+		return $_SESSION['u_id'];		
 	}else{
 		cookie_auth();
-		return $_SESSION['logged_in'];
+		return $_SESSION['u_id'];
 	}
 }
 
@@ -314,7 +313,7 @@ function user_login_verify(){
 function cookie_auth() {
 	global $db;
 	if(!cookie_verify_hash()) {
-		$_SESSION['logged_in'] = false;
+		$_SESSION['u_id'] = '';
 		return;
 	}
 	$uid = $_COOKIE['uid'];
@@ -323,7 +322,7 @@ function cookie_auth() {
 		where `id` = $uid";
 	if($result = $db->query($query)) {
 		if($result->num_rows === 0) {
-			$_SESSION['logged_in'] = false;
+			$_SESSION['u_id'] = '';
 			setcookie('hash', '', time()-3600);
 			setcookie('uid', '', time()-3600);
 			setcookie('stamp', '', time()-3600);		
@@ -347,9 +346,8 @@ function cookie_auth() {
 		$result->free();
 	}
 	*/		
-	$_SESSION['logged_in'] = true;
-	$_SESSION['uid'] = $uid;
-	$_SESSION['screen_name'] = $user['screen_name'];
+	$_SESSION['u_id'] = $uid;
+	$_SESSION['u_screen_name'] = $user['screen_name'];
 	cookie_refresh();
 }
 

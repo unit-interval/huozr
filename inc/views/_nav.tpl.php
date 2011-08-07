@@ -4,16 +4,16 @@ case 'logged_in':
 ?>
 	<ul id='nav'> 
 		<li> 
-			<a href='index'>首页</a> 
+			<a href='/'>首页</a> 
 		</li> 	
 		<li> 
-			<a href='home'>开始</a> 
+			<a href='/home'>开始</a> 
 		</li> 
 		<li> 
-			<a href='setting'>设置</a> 
+			<a href='/setting'>设置</a> 
 		</li> 
 		<li> 
-			<a href='oauth?s=logout' class='nav'>退出</a> 
+			<a href='/oauth?s=logout' class='nav'>退出</a> 
 		</li> 
 	</ul> 
 <?
@@ -26,7 +26,7 @@ default:
 ?>
 	<ul id='nav'> 
 		<li> 
-			<a href='index'>首页</a> 
+			<a href='/'>首页</a> 
 		</li> 	
 		<li> 
 			<a href='/login' class='nav'>登录/注册</a> 
