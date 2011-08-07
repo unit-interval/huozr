@@ -1,6 +1,8 @@
 <?php
 
 include '../config.php';
+include DIR_INC . '/functions.php';
+include DIR_INC . '/database.php';
 
 session_name('huozradmin');
 session_start();
