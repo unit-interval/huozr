@@ -267,9 +267,21 @@ function douban_oauth($oauth_token){
 
 //login successful (ATTENTION: no authorize in this function)  use: user_id, bool temp_login (if TRUE no cookie )
 function user_login($user_id, $temp_login){
+	global $db;
+	$query = "select * from `users`
+		where `id` = $user_id";
+	if($result = $db->query($query)) {
+		if($result->num_rows === 0) {
+			$_SESSION['logged_in'] = false; //登录失败！ 	
+			return;
+		}
+		$user = $result->fetch_assoc();
+		$result->free();
+	}
 	$_SESSION['logged_in'] = true;
 	$_SESSION['uid'] = $user_id;
-	if(!$input['pub']) {
+	$_SESSION['screen_name'] = $user['screen_name'];	
+	if(!$temp_login) {
 		$expire = time()+3600*24*30;
 		$stamp = date('YmdHis');
 		setcookie('uid', $user_id, $expire);
@@ -279,7 +291,7 @@ function user_login($user_id, $temp_login){
 		setcookie('uid', '', time()-3600);
 }
 
-//login out , no input, no output
+//log out , no input, no output
 function user_logout(){
 	setcookie('hash', '', time()-3600);
 	setcookie('uid', '', time()-3600);
@@ -290,8 +302,12 @@ function user_logout(){
 
 //user login verify, result true or false
 function user_login_verify(){
-	 cookie_auth();
-	 return $_SESSION['logged_in'];
+	if($_SESSION['logged_in']){
+		return $_SESSION['logged_in'];		
+	}else{
+		cookie_auth();
+		return $_SESSION['logged_in'];
+	}
 }
 
 //cookie autorize
