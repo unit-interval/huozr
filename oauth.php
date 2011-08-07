@@ -1,5 +1,6 @@
 <?php
 include 'config.php';
+include DIR_INC . '/bootstrap.php';
 include DIR_INC . '/users_functions.php';
 
 session_name(SESSUSER);
@@ -12,27 +13,28 @@ if($_GET['s']=='renren') {
 		echo '你好，来自人人网的 '  . $_SESSION['renren_name'] . '（也就是您）已经绑定过本网站的帐户，在本网站的 id 是' . $u['user_id'] . '，欢迎回来！';
 		// 转入登录后页面
 		user_login($u['user_id'], FALSE);
-		header('Location: oauth.php?s=home');		
+		header('Location: home');		
 	}else{
 		echo '你好'. $_SESSION['renren_name'] . '，欢迎来到活字网，你已经用人人账号初次登录成功。';
-		// 转入登录后页面
+		// 转入初次登录后页面
 		user_login(user_openid_auth(user_create($_SESSION['renren_name']), 'renren', $_SESSION['renren_uid'], $_SESSION['renren_token'], $_SESSION['renren_secret']), FALSE);
-		header('Location: oauth.php?s=home');		
+		header('Location: home');		
 	}
 	
 }elseif($_GET['s']=='sina_weibo'){
 	if(!isset($_GET['oauth_token']) && $_SESSION['sinawb_state']==1) $_SESSION['sinawb_state'] = 0;
 	sina_weibo_oauth($_GET['oauth_token']);
+	print_r($_SESSION['sinawb_uid']);
 	if($u = user_openid_auth_exists('sina_weibo', $_SESSION['sinawb_uid'])){
 		echo '你好，新浪微博上的 '  . $_SESSION['sinawb_name'] . ' 用户（也就是您）已经绑定过本网站的帐户，在本网站的 id 是' . $u['user_id'] . '，欢迎回来！';
 		// 转入登录后页面
 		user_login($u['user_id'], FALSE);
-		header('Location: oauth.php?s=home');		
+		header('Location: home');		
 	}else{
 		echo '你好'. $_SESSION['sinawb_name'] . '，欢迎来到活字网，你已经用新浪微博初次登录成功。';
-		// 转入登录后页面
+		// 转入初次登录后页面
 		user_login(user_openid_auth(user_create($_SESSION['sinawb_name']), 'sina_weibo', $_SESSION['sinawb_uid'], $_SESSION['sinawb_token'], $_SESSION['sinawb_secret']), FALSE);
-		header('Location: oauth.php?s=home');		
+		header('Location: home');		
 	}
 	
 }elseif($_GET['s']=='tencent_weibo'){
@@ -42,12 +44,12 @@ if($_GET['s']=='renren') {
 		echo '你好，腾讯微博上的 '  . $_SESSION['qqwb_name'] . ' 用户（也就是您）已经绑定过本网站的帐户，在本网站的 id 是' . $u['user_id'] . '，欢迎回来！';
 		// 转入登录后页面
 		user_login($u['user_id'], FALSE);
-		header('Location: oauth.php?s=home');		
+		header('Location: home');		
 	}else{
 		echo '你好'. $_SESSION['qqwb_name'] . '，欢迎来到活字网，你已经用腾讯微博初次登录成功。';
-		// 转入登录后页面
+		// 转入初次登录后页面
 		user_login(user_openid_auth(user_create($_SESSION['qqwb_name']), 'tencent_weibo', $_SESSION['qqwb_uid'], $_SESSION['qqwb_token'], $_SESSION['qqwb_secret']), FALSE);
-		header('Location: oauth.php?s=home');
+		header('Location: home');
 	}
 }elseif($_GET['s']=='douban'){
 	
@@ -57,20 +59,19 @@ if($_GET['s']=='renren') {
 		echo '你好，豆瓣上的 '  . $_SESSION['douban_name'] . ' 用户（也就是您）已经绑定过本网站的帐户，在本网站的 id 是' . $u['user_id'] . '，欢迎回来！';
 		//转入登录后页面
 		user_login($u['user_id'], FALSE);
-		header('Location: oauth.php?s=home');
+		header('Location: home');
 	}else{
 		echo '你好'. $_SESSION['douban_name'] . '，欢迎来到活字网，你已经用豆瓣账号初次登录成功。';
-		//转入登录后页面
+		//转入初次登录后页面
 		user_login(user_openid_auth(user_create($_SESSION['douban_name']), 'douban', $_SESSION['douban_uid'], $_SESSION['douban_token'], $_SESSION['douban_secret']), FALSE);
-		header('Location: oauth.php?s=home');	
+		header('Location: home');	
 	}
 }elseif($_POST['s']=='basic'){
 	if($u = user_exists($_POST['username'])){
 		if(md5(SALT_PW . $_POST['passwd']) == $u['passwd']){ 
-			user_login($u['user_id'], FALSE);
-			header('Location: oauth.php?s=home');			
+			user_login($u['user_id'], $_POST['public-login']);
+			header('Location: home');			
 			//echo '登录成功，欢迎你，用户 id 为 ' . $u['user_id'] . ' 的用户！';
-
 		}
 	}else{
 		echo "登录不成功，请重试";
@@ -80,11 +81,14 @@ if($_GET['s']=='renren') {
 		echo '欢迎回来，你的活字网用户 id 是 '. $_SESSION['uid'] . '，昵称是 '. $_SESSION['screen_name'] .'。';
 		die('<a href="oauth.php?s=logout">【登出】</a>');
 	}else{
-		echo '抱歉，你还没有登录。请选择使用下列方法登录。';
+		echo '抱歉，你还没有登录。';
+		die('<a href="login">【登录】</a>');
+		
 	}
 
 }else{
 	user_logout();
+	header('Location: login');			
 	/* debug
 	$_SESSION['sinawb_state'] = 0;
 	$_SESSION['sinawb_token'] = 0;

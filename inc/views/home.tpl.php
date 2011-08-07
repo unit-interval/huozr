@@ -1,3 +1,6 @@
+<?php	
+echo '欢迎回来，你的活字网用户 id 是 '. $_SESSION['uid'] . '，昵称是 '. $_SESSION['screen_name'] .'。';
+?>
 <ul id='menu'> 
 	<li id='flow-menu'> 
 	<h4>新建文印</h4> 
