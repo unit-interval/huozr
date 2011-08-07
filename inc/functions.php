@@ -54,7 +54,7 @@ function path_ctrl($str = '', $m = 0) {
 		break;
 	case 1:
 		$cache = $cache ? "$cache/$str" : $str;
-		$str = $cache
+		$str = $cache;
 		break;
 	case 2:
 		if ($cache)

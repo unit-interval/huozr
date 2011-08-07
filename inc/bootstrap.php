@@ -4,9 +4,6 @@
  * prepare functions and varialbles that need to be loaded on every request.
  */
 
-/** turn on output buffering */
-ob_start();
-
 /** include necessary files */
 include DIR_INC . '/functions.php';
 include DIR_INC . '/database.php';
@@ -19,12 +16,17 @@ include DIR_INC . '/database.php';
 $req_path_str = strtok($_SERVER['REQUEST_URI'], '?');
 $req_path_cur = '';
 $req_path = explode('/', trim($req_path_str, '/'));
-$req_path_parent = array();
+//$req_path_parent = array();
 function req_path() {
-	global $req_path_cur, $req_path, $req_path_parent;
+	global $req_path_cur, $req_path;
+//	global $req_path_parent;
 	$req_path_cur = array_shift($req_path);
-	if ($req_path_cur)
-		$req_path_parent[] = $req_path_cur;
+//	if ($req_path_cur)
+//		$req_path_parent[] = $req_path_cur;
 	return $req_path_cur;
 }
+
+session_name(SESSNAME);
+session_start();
+
 

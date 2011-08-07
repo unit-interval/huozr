@@ -12,9 +12,8 @@ define('DIR_MEDIA', DIR_ROOT . '/media');
 define('DIR_VIEW', DIR_INC . '/views');
 define('DIR_CTRL', DIR_INC . '/controllers');
 
-/** cookie session */
-define('SESSUSER', 'huozruser');
-define('SESSPROV', 'huozrprov');
+/** cookie session name */
+define('SESSNAME', 'huozrsess');
 
 /** make inc files not accessible directly */
 $start_including = true;
@@ -23,4 +22,5 @@ $start_including = true;
 include DIR_INC . '/config.local.php';
 if ($local_config_ver != '08051637')
 	die('config.local.php was updated / not found.');
+unset($local_config_var);
 
