@@ -98,7 +98,7 @@ function user_login($user_id, $temp_login){
 		where `id` = $user_id";
 	if($result = $db->query($query)) {
 		if($result->num_rows === 0) {
-			$_SESSION['u_id'] = ''; //登录失败！ 	
+			$_SESSION['u_id'] = ''; 	
 			return;
 		}
 		$user = $result->fetch_assoc();
@@ -109,18 +109,18 @@ function user_login($user_id, $temp_login){
 	if(!$temp_login) {
 		$expire = time()+3600*24*30;
 		$stamp = date('YmdHis');
-		setcookie('uid', $user_id, $expire);
-		setcookie('stamp', $stamp, $expire);
-		setcookie('hash', md5(date('Y-M-').$user_id.$stamp), $expire);
+		cookie_set('u_id', $user_id, $expire);
+		cookie_set('stamp', $stamp, $expire);
+		cookie_set('hash', md5(date('Y-M-').$user_id.$stamp), $expire);
 	} else
-		setcookie('uid', '', time()-3600);
+		cookie_set('u_id', '', time()-3600);
 }
 
 //log out , no input, no output
 function user_logout(){
-	setcookie('hash', '', time()-3600);
-	setcookie('uid', '', time()-3600);
-	setcookie('stamp', '', time()-3600);
+	cookie_set('hash', '', time()-3600);
+	cookie_set('u_id', '', time()-3600);
+	cookie_set('stamp', '', time()-3600);
 	unset ($_SESSION['u_id']);
 	unset ($_SESSION['u_screen_name']);
 }
@@ -142,16 +142,16 @@ function cookie_auth() {
 		$_SESSION['u_id'] = '';
 		return;
 	}
-	$uid = $_COOKIE['uid'];
+	$uid = $_COOKIE['u_id'];
  
 	$query = "select * from `users`
 		where `id` = $uid";
 	if($result = $db->query($query)) {
 		if($result->num_rows === 0) {
 			$_SESSION['u_id'] = '';
-			setcookie('hash', '', time()-3600);
-			setcookie('uid', '', time()-3600);
-			setcookie('stamp', '', time()-3600);		
+			cookie_set('hash', '', time()-3600);
+			cookie_set('u_id', '', time()-3600);
+			cookie_set('stamp', '', time()-3600);		
 			return;
 		}
 		$user = $result->fetch_assoc();
@@ -160,7 +160,7 @@ function cookie_auth() {
 	/*	
 	if($_COOKIE['stamp'] <= $user['`stamp`+0']) {
 		$_SESSION['logged_in'] = false;
-		setcookie('hash', '', time()-3600);
+		cookie_set('hash', '', time()-3600);
 		return;
 	}	
 	$query = "select `pocket`, `amount` from `credit`
@@ -181,23 +181,23 @@ function cookie_auth() {
 function cookie_refresh() {
 	$expire = time()+3600*24*30;
 	foreach($_COOKIE as $key => $value)
-	setcookie($key, $value, $expire);
+	cookie_set($key, $value, $expire);
 }
 // verify cookie hash
 function cookie_verify_hash() {
-	if(!isset($_COOKIE['hash']) || !isset($_COOKIE['uid']) || !isset($_COOKIE['stamp']))
+	if(!isset($_COOKIE['hash']) || !isset($_COOKIE['u_id']) || !isset($_COOKIE['stamp']))
 	return false;
 	$date = date_create();
 	$salt1 = $date->format('Y-M-');
 	$date->modify('-1 month');
 	$salt2 = $date->format('Y-M-');
-	if (($_COOKIE['hash'] == md5($salt1 . $_COOKIE['uid'] . $_COOKIE['stamp'])) ||
-	($_COOKIE['hash'] == md5($salt2 . $_COOKIE['uid'] . $_COOKIE['stamp'])))
+	if (($_COOKIE['hash'] == md5($salt1 . $_COOKIE['u_id'] . $_COOKIE['stamp'])) ||
+	($_COOKIE['hash'] == md5($salt2 . $_COOKIE['u_id'] . $_COOKIE['stamp'])))
 	return true;
 	else {
-		setcookie('hash', '', time()-3600);
-		setcookie('uid', '', time()-3600);
-		setcookie('stamp', '', time()-3600);		
+		cookie_set('hash', '', time()-3600);
+		cookie_set('u_id', '', time()-3600);
+		cookie_set('stamp', '', time()-3600);		
 		return false;
 	}
 }

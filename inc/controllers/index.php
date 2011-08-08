@@ -1,6 +1,4 @@
 <?php
-include DIR_INC . '/users_functions.php';
-
-if (user_login_verify()){
+if ($_SESSION['u_id']){
 	$yield_for['nav'] = 'logged_in';
 }

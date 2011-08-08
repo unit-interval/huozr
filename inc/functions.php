@@ -78,3 +78,10 @@ function path_view($str) {
 	return DIR_VIEW . "/$str.tpl.php";
 }
 
+
+/**
+ * translate $str to it's view file path
+ */
+function cookie_set($name, $value, $expire){
+	return setcookie($name, $value, $expire, '/login/'); 
+}

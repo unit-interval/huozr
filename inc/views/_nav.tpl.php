@@ -13,7 +13,7 @@ case 'logged_in':
 			<a href='/setting'>设置</a> 
 		</li> 
 		<li> 
-			<a href='/oauth?s=logout' class='nav'>退出</a> 
+			<a href='/logout' class='nav'>退出</a> 
 		</li> 
 	</ul> 
 <?
@@ -29,11 +29,8 @@ default:
 			<a href='/'>首页</a> 
 		</li> 	
 		<li> 
-			<a href='/login' class='nav'>登录</a> 
-		</li> 
-		<li> 
-			<a href='/signup' class='nav'>注册</a> 			
-		</li>		
+			<a href='/login' class='nav'>登录/注册</a> 
+		</li> 	
 	</ul> 
 <?
 }

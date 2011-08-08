@@ -30,7 +30,7 @@ define('RENREN_API','http://api.renren.com/restserver.do');
 define('RENREN_AUTH_URL','https://graph.renren.com/oauth/authorize');
 define('RENREN_ACC_URL','https://graph.renren.com/oauth/token');
 define('RENREN_SSKEY_URL','https://graph.renren.com/renren_api/session_key');
-define('RENREN_CB_URL','http://gene.shiyiquan.cn/login.php?s=renren');
+define('RENREN_CB_URL','');
 */
 
 //douban oauth,result: array with token, secret, remote_id, remote_screen_name.
