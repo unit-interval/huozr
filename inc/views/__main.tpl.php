@@ -11,9 +11,8 @@
 	<?= js_script_tags() ?>
 
 </head>
-<body id='index'>
+<body id='<?= $body_id ?>'>
 	<div id='wrapper'>
-		<div id="gradient"> </div>
 		<div id='container'>
 			<div id='header'>
 				<a href='/'><img src='/media/img/logo.png' alt='Photoncopy' id='logo'/></a>

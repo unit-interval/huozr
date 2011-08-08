@@ -1,4 +1,18 @@
 $(function(){
+	//-------------------- Notification --------------------
+	$('#notification-icon').click(function(){
+		$('#notification-icon').toggleClass('active');
+		$('#notification').toggleClass('active').children('div').children('ul').css('max-height', $(window).height()-90);
+	})
+	//-------------------- Input-Select --------------------
+	$('div.input-select').delegate('ul > li', 'click', function(){
+		$(this).parent().hide().siblings('input.input-text').val($(this).text());
+	}).find('ul').hide().end().find('input').focus(function(){
+		$(this).parent().find('ul').show();
+	}).blur(function(){
+		
+	})
+	//-------------------- HOME Page --------------------
 	if ($('#home #order ul.menu').length) view_orders(0);  
 	else new_order(0);
 	$('#home #flow li').click(function(){
@@ -7,28 +21,52 @@ $(function(){
 	$('#home #history li').click(function(){
 		view_orders($(this).index());
 	});
+	//-------------------- SETTING Page --------------------
+	$('#setting #set-password').hide().next().hide();
+	if ($('#setting #username').find('input').val() == '') $('#setting #username').find('button.button-blue').hide();
+	else $('#setting #username').find('button.button-orange').hide();
+	$('#setting #username').find('button.button-orange').click(function(){
+		$(this).hide().next().show().parent().find('input').removeClass('disabled').attr('disabled', '')
+		.closest('tr').next().show().find('input').removeClass('disabled').attr('disabled', '')
+		.end().next().show().find('input').removeClass('disabled').attr('disabled', '');
+	}).end().find('button.button-blue').click(function(){
+		$(this).hide().next().show()
+		.closest('tr').next().show().find('input').removeClass('disabled').attr('disabled', '')
+		.end().next().show().find('input').removeClass('disabled').attr('disabled', '');
+	})
+	$('#setting table tr:gt(2)').find('button.button-blue').click(function(){
+		$(this).hide().next().show().parent().find('input').removeClass('disabled').attr('disabled', '').focus();
+	}).end().find('button.button-green').click(function(){
+		//TODO update personal info
+		$(this).hide().prev().show().parent().find('input').addClass('disabled').attr('disabled', 'disabled').end().find('ul').hide();
+	})
+	$('#setting #content table').find('input.input-text').attr('disabled', 'disabled').addClass('disabled')
+	.end().find('button.button-green').hide()
+	.find('button.button-blue').click(function(){
+		$(this).prev('input.input-text').removeClass('disabled')
+	});
+	
 });
-
+//-------------------- HOME Function --------------------
 function view_orders(n){
-	$('#home #history > li:eq('+n+')').siblings().removeClass('active');
-	$('#home #history > li:eq('+n+')').addClass('active');
+	$('#home #history > li:eq('+n+')').addClass('active').siblings().removeClass('active');
 	//TODO get orders with status n, place them in history-detail
-	$('#home #order ul.menu li').click(function(){
+	$('#home #order ul.menu li').removeClass('active').click(function(){
 		$(this).addClass('active');
 		$(this).siblings().removeClass('active');
 		view_order_detail($(this).data('oid'));
 	});
 	$('#home #history-detail').show();
-	$('#home #order ul.menu li').removeClass('active');
+	$('#home #order').css('width', '');
 	$('#home #order-detail').hide();
-	$('#home #flow > li').removeClass('active');
-	$('#home #flow > li:first-child').siblings().addClass('disabled');
+	$('#home #flow > li').removeClass('active').first().siblings().addClass('disabled');
 	$('#home #flow-detail').hide();
 }
 
 function view_order_detail(n){
 	//TODO get order_dtail of oid n, place them in order-detail
 	$('#home #order-detail table tr:even').addClass('alt');
+	$('#home #order').css('width', '250px');
 	$('#home #order-detail').slideDown(50);
 }
 
@@ -74,7 +112,7 @@ function new_order(n){
 			break;
 		case 3: 
 			//TODO get requiremtn form, and place them in #requirement
-			set_default_requirement();
+			$('#home #sub-menu').css('width', '250px');
 			$('#home #requirement').slideDown(50).find('ul.option > li').click(function(){
 				$(this).addClass('active').siblings().removeClass('active');
 				set_option_value($(this).parent());
@@ -85,10 +123,6 @@ function new_order(n){
 			break;
 	}
 	$('#home #flow-detail').show();
-}
-
-function set_default_requirement(){
-	//TODO...
 }
 
 function set_option_value(x){

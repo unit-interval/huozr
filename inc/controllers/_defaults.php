@@ -1,5 +1,7 @@
 <?php
 
+$body_id = 'index';
+
 /**
  * prepare array to hold all instance variables
  */
