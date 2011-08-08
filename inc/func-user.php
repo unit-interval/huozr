@@ -181,7 +181,7 @@ function cookie_auth() {
 function cookie_refresh() {
 	$expire = time()+3600*24*30;
 	foreach($_COOKIE as $key => $value)
-	cookie_set($key, $value, $expire);
+	setcookie($key, $value, $expire);
 }
 // verify cookie hash
 function cookie_verify_hash() {
