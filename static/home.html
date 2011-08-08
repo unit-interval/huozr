@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="zh" xml:lang="zh"> 
+	<head> 
+		<meta name="description" content="xxx" /> 
+		<meta name="keywords" content="print" /> 
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+		<meta http-equiv="content-language" content="zh-CN" /> 
+		<title>活字</title> 
+		<link rel='stylesheet' type='text/css' href='/media/css/style_new.css' />
+		<script type='text/javascript' src='/media/js/jquery.js'></script>
+		<script type='text/javascript' src='/media/js/huozr.js'></script>
+	</head>
+	<body id='home'>
+		<div id='wrapper'>
+			<div id='container'>
+				<div id='header'>
+					<a href='/'>
+						<img src='/media/img/logo.png' alt='Photoncopy' id='logo'/>
+					</a>
+					<ul id='nav'>
+						<li class='active'>
+							<a href='home'>开始</a>
+						</li>
+						<li>
+							<a href='setting'>设置</a>
+						</li>
+						<li>
+							<a href='index' class='nav'>退出</a>
+						</li>
+					</ul>
+				</div>
+				<div id='content'>
+					<ul id='menu'>
+						<li id='flow-menu'>
+							<h4>新建文印</h4>
+							<ul id='flow' class='menu'>
+								<li>选择打印店</li>
+								<li>选择服务</li>
+								<li>上传文件</li>
+								<li>提交文印要求</li>
+							</ul>
+						</li>
+						<li id='history-menu'>
+							<h4>文印历史</h4>
+							<ul id='history' class='menu'>
+								<li>全部</li>
+								<li>队列中 (1)</li>
+								<li>打印中 (2)</li>
+								<li>到店自助</li>
+								<li>待领取 (4)</li>
+								<li>已撤消</li>
+							</ul>
+						</li>
+					</ul>
+					<form id='flow-detail' class='detail'>
+						<div id='sub-menu'>
+							<div id='store'>
+								<input type='hidden' name='pid' />
+								<h4>选择打印店（北京大学）</h4>
+								<ul class='menu'>
+									<li data-pid='1'>农行提款机旁打印店（在线）</li>
+									<li data-pid='2'>三十五楼打印店（离线）</li>
+								</ul>
+								<a href='addschool'>想添加打印店？</a>
+							</div>
+							<div id='service'>
+								<h4>选择服务</h4>
+								<ul class='menu'>
+									<li>定制打印</li>
+									<li>低碳打印</li>
+								</ul>
+							</div>
+							<div id='upload'>
+								<h4>上传文件</h4>
+								<input type='file' name='file' />
+								<ul id='upload-progress' class='menu'>
+									<li class='active'>
+										<label>上传完成</label>
+										<span>100% = 245px</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div id='requirement'>
+							<h4>提交文印要求</h4>
+							<dl>
+								<dt>选择纸张</dt>
+								<dd>
+									<input type='hidden' name='paper' value='A4'/>
+									<ul class='option'>
+										<li class='button-option'>A4</li>
+										<li class='button-option'>B5</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt>选择油墨</dt>
+								<dd>
+									<input type='hidden' name='color' value='黑白'/>
+									<ul class='option'>
+										<li class='button-option'>黑白</li>
+										<li class='button-option'>彩色</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt>环保选项</dt>
+								<dd>
+									<input type='hidden' name='back' value='单面打印'/>
+									<ul class='option'>
+										<li class='button-option'>单面打印</li>
+										<li class='button-option'>双面打印</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt>版式缩放</dt>
+								<dd>
+									<input type='hidden' name='layout' value='1版'/>
+									<ul class='option'>
+										<li class='button-option'>1版</li>
+										<li class='button-option'>2版</li>
+										<li class='button-option'>4版</li>
+										<li class='button-option'>6版</li>
+										<li class='button-option'>8版</li>
+										<li class='button-option'>9版</li>
+										<li class='button-option'>12版</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt>打印份数</dt>
+								<dd>
+									<input type='text' name='copy' class='input-text'>
+									<label class='label-hint'>只能是数字</label>
+								</dd>
+							</dl>
+							<dl>
+								<dt>附加服务</dt>
+								<dd>
+									<input type='hidden' name='misc' value='简易装订'/>
+									<ul class='multi-option'>
+										<li class='button-multi-option'>简易装订</li>
+										<li class='button-multi-option'>侧边装订</li>
+										<li class='button-multi-option'>添加封面</li>
+									</ul>
+								</dd>
+							</dl>
+							<dl>
+								<dt>客户留言</dt>
+								<dd>
+									<input type='text' name='note' class='input-text'>
+								</dd>
+							</dl>
+							<button type='submit' id='order-submit' class='button-blue'>确认并提交</button>
+						</div>
+					</form>
+					<div id='history-detail' class='detail'>
+						<div id='order'>
+							<h4>全部</h4>
+							<ul class='menu'>
+								<li data-oid='2'>#2 - fsdfsdfsfsdfsdfsfsfsdfsfsdfsdfsfsdf.pdf</li>
+								<li data-oid='1'>#1 - fjdslffsdafasfafsdafasfsafasdfasdffsafasfa</li>
+							</ul>
+						</div>
+						<div id='order-detail'>
+							<h4>#1 - fsdfdsfsdfdsfsdfsdfsdffsfsfsfsdfsdfsfsfsdfsdfsdfdsf.pdf</h4>
+							<table>
+								<tbody>
+									<tr>
+										<th>时间</th><td>2011 Aug 1, 8:10PM</td>
+									</tr>
+									<tr>
+										<th>打印店</th><td>北京大学农行提款机旁打印店</td>
+									</tr>
+									<tr>
+										<th>文件</th><td>afsdfsdfsfsdfsdfdsfsdfsfsdfsdsdfsdfsdfdsfsdfsbc.pdf</td>
+									</tr>
+									<tr>
+										<th>纸张</th><td>A4</td>
+									</tr>
+									<tr>
+										<th>油墨</th><td>黑白</td>
+									</tr>
+									<tr>
+										<th>环保</th><td>双面</td>
+									</tr>
+									<tr>
+										<th>缩放</th><td>2版</td>
+									</tr>
+									<tr>
+										<th>份数</th><td>5份</td>
+									</tr>
+									<tr>
+										<th>服务</th><td>简易装订</td>
+									</tr>
+									<tr>
+										<th>留言</th><td>fkdjfklsjfskljfklsjflsjflsfjsklfjslkfjlsdjflskfkdjfklsjfskljfklsjflsjflsfjsklfjslkfjlsdjflskfkdjfklsjfskljfklsjflsjflsfjsklfjslkfjlsdjflskfkdjfklsjfskljfklsjflsjflsfjsklfjslkfjlsdjflsk</td>
+									</tr>
+								</tbody>
+							</table>
+							<button class='button-gray'>撤消订单</button>
+						</div>
+					</div>
+					<br>
+				</div>
+			</div>
+		</div> 
+		<div id='footer'>
+			<div id='footer-content'>
+				<ul>
+					<li id='notification-icon'>
+						<span>0</span>
+					</li>
+					<li>Roy有50页低碳打印配额</li>
+				</ul>
+				<div id='notification'>
+					<div id='notification-summary'>
+						<h3>通知</h3>
+						<ul>
+							<li>
+								更新：北京大学农行提款机旁打印店接受了文印任务#2
+								<span></span>
+							</li>
+							<li>
+								订单：你向北京大学农行提款机旁打印店提交了文印任务#1
+								<span></span>
+							</li>
+						</ul>
+					</div>
+					<div id='notification-content'>
+						<h3>‹ 回到通知
+							<ul>
+								<li class='disabled'>‹ 上一封</li>
+								<li> | </li>
+								<li class='active'>下一封 ›</li>
+							</ul>
+						</h3>
+						<ul>
+							<li>jflsdkfjklsjfl</li>
+							<li>jflsdkfjklsjfl</li>
+							<li>jflsdkfjklsjfl</li>
+						</ul>
+					</div>
+				</div>
+	        	<p id='footer-copyright'>©2011 活字网 版权所有</p>
+			</div>
+		</div>
+	</body>
+</html>

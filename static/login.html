@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="zh" xml:lang="zh"> 
+	<head> 
+		<meta name="description" content="xxx" /> 
+		<meta name="keywords" content="print" /> 
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+		<meta http-equiv="content-language" content="zh-CN" /> 
+		<title>活字 | 登录</title> 
+		<link rel='stylesheet' type='text/css' href='/media/css/style_new.css' /> 
+		<link rel='stylesheet' type='text/css' href='/media/css/index_new.css' />  
+		<script type='text/javascript' src='/media/js/jquery.js'></script>
+	</head>
+	<body id='login'>
+		<div id='wrapper'>
+			<div id='container'>
+				<div id='header'>
+					<a href='/'>
+						<img src='/media/img/logo.png' alt='Photoncopy' id='logo'/>
+					</a>
+					<ul id='nav'>
+						<li class='active'>
+							<a href='login' class='nav'>登录<span></span>注册</a>
+						</li>
+					</ul>
+				</div>
+				<div id='content'>
+					<div id='login-oauth'>
+						<h4>已经拥有以下合作网站的帐号？无需注册，直接登录：</h4>
+						<ul>
+							<li><a href='login/douban' id='douban-login' class='button-orange'>豆瓣</a></li>
+							<li><a href='login/renren' id='renren-login' class='button-orange'>人人</a></li>
+							<li><a href='login/weibo' id='weibo-login' class='button-orange'>新浪微博</a></li>
+						</ul>
+					</div>
+					<div id='login-form'>
+						<form action='login' method='post'>
+							<h4>或者，通过活字网帐号登录：</h4>
+							<div class='input-group'>
+								<input class='input-text' type='text' id='email' name='email' placeholder='用户名' />
+								<label class='label-hint' for='email'>帐号或密码错误，请重试。</label>
+							</div>
+							<div class='input-group'>
+								<input class='input-text' type='password' id='password' name='email' placeholder='密码' />
+								<label class='label-hint' for='password'>密码太短。</label>
+							</div>
+							<div class='input-group'>
+								<input checked='checked' id='remember-login' name='remember-login' type='checkbox'>
+								<label for="remember-login">保持登录状态</label>
+								<a href='forgot' id='forgot'>忘记密码？</a>
+							</div>
+							<div>
+								<button type='submit' class='button-blue'>登录</button>
+							</div>
+						</form>
+					</div>
+					<div id='signup'>
+						<h4>如果你没有以上任何帐户，在此注册：</h4>
+						<a href='signup' class='button-blue'>立即注册</a>
+					</div>
+				</div>
+			</div>
+		</div> 
+		<div id='footer'>
+			<div id="footer-content">
+	        	<p>©2011 活字网 版权所有</p>
+			</div>
+		</div>
+	</body>
+</html>
