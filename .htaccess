@@ -28,11 +28,11 @@ php_value short_open_tag 1
   </FilesMatch>
 </IfModule>
 
+## TODO add trailer slash
 <IfModule mod_rewrite.c>
 	RewriteEngine on
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
-#	RewriteRule /$ - [S=1]
 	RewriteRule ^ index.php [L]
 </IfModule>
 
