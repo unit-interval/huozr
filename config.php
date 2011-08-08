@@ -19,9 +19,9 @@ define('SESSNAME', 'huozrsess');
 $start_including = true;
 
 /** local settings */
-include DIR_INC . '/config.local.php';
-if ($local_config_ver != '08051637')
-	die('config.local.php was updated / not found.');
-unset($local_config_var);
-include DIR_INC . '/config.keys.php';
+include DIR_INC . '/local.config.php';
+if ($local_config_ver != '08081752')
+	die('local.config.php was updated / not found.');
+unset($local_config_ver);
+include DIR_INC . '/local.keys.php';
 

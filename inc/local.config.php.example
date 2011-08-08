@@ -4,7 +4,7 @@
  * when changes should be forced to config.local.php
  * edit $local_config_ver below and in the config.php file
  */
-$local_config_ver = '08051637';
+$local_config_ver = '08081752';
 
 /** instance dependent values */
 define('DB_HOST', 'localhost');

@@ -1,7 +1,6 @@
 # project ignored files
 tmp
-inc/config.local.php
-inc/config.keys.php
+inc/local.*.php
 
 # global ignored files
 *.swp
