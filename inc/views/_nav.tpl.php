@@ -29,7 +29,7 @@ default:
 			<a href='/'>首页</a> 
 		</li> 	
 		<li> 
-			<a href='/login' class='nav'>登录/注册</a> 
+			<a href='/login/' class='nav'>登录/注册</a> 
 		</li> 	
 	</ul> 
 <?

@@ -23,7 +23,7 @@ function do_filter($fil) {
 		}
 		if (! $_SESSION['u_id']) {
 			$_SESSION['callback_uri'] = $_SERVER['REQUEST_URI'];
-			header('Location: /login');
+			header('Location: /login/');
 			die;
 		}
 		break;

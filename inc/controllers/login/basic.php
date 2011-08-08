@@ -13,9 +13,9 @@ if($user = user_exists($_POST['username'])){
 		}
 		header('Location: /home');			
 	}else
-		header('Location: /login');			
+		header('Location: /login/');			
 }else{
 	// notice user
-		header('Location: /login');			
+		header('Location: /login/');			
 }
 

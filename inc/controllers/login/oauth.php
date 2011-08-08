@@ -22,7 +22,7 @@ $oauth = $function_handle($_GET['oauth_token']);
 
 /** actually douban is the only one who returns to callback when the auth fails */
 if (! $oauth['remote_id']) {
-	header('Location: /login');
+	header('Location: /login/');
 	//TODO: notice user
 	die();
 }
