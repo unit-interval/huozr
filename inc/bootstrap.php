@@ -13,9 +13,8 @@ include DIR_INC . '/database.php';
  * call req_path() to get current path
  * TODO: perhaps wrap these in a object
  */
-$req_path_str = strtok($_SERVER['REQUEST_URI'], '?');
 $req_path_cur = '';
-$req_path = explode('/', trim($req_path_str, '/'));
+$req_path = explode('/', trim(strtok($_SERVER['REQUEST_URI'], '?'), '/'));
 //$req_path_parent = array();
 function req_path() {
 	global $req_path_cur, $req_path;

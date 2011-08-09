@@ -8,12 +8,15 @@
 /**
  * for developers only, dump all param to browser
  */
-function err_debug() {
+function err_debug($dump = false) {
 	if(! DEV_ENV)
 		return;
 	for ($i = 0; $i < func_num_args(); $i++) {
-		echo "<hr /><p><h3><em>FATAL: </em>$msg</h3></p><pre>";
-		print_r(func_get_args());
+		echo "<hr /><p><h3><em>DEBUG: </em>printing/dumping variables</h3></p><pre>";
+		if ($dump)
+			var_dump(func_get_args());
+		else
+			print_r(func_get_args());
 		echo "</pre>";
 		die;
 	}

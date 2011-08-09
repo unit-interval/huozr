@@ -5,13 +5,13 @@
 	<meta name="keywords" content="print" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="content-language" content="zh-CN" />
-	<title>活字网 | <?= $res['head_title'] ?></title>
+	<title><?= $head_title ?></title>
 	<?= css_link_tags() ?>
 
 	<?= js_script_tags() ?>
 
 </head>
-<body id='<?= $res['body_id'] ?>'>
+<body id='<?= $body_id ?>'>
 	<div id='wrapper'>
 		<div id='container'>
 			<div id='header'>

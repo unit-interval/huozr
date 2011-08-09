@@ -1,4 +1,4 @@
 <?php
 
-$head_title = '错误';
-$body_id = 'error';
+$res['head_title'] = '错误';
+$res['body_id'] = 'error';
