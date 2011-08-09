@@ -536,9 +536,8 @@ div.input-select > ul > li:hover {
 	padding: 0px;
 	display: inline-block;
 }
-/* -------------------- Login -------------------- */
-#signup #content div.input-group {
-	margin-bottom: 10px;
+#login #signup-here {
+	display: none;
 }
 /* -------------------- Sitetour -------------------- */
 #sitetour #content div.input-group {
