@@ -1,5 +1,8 @@
 <?php
 
+$res['head_title'] = '注册';
+$res['body_id'] = 'login';
+
 include_once DIR_INC . '/func-user.php';
 
 if ($_POST['username']!='') {

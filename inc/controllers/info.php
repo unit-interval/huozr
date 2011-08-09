@@ -1,6 +1,6 @@
 <?php
 
-$res['body_id'] = 'home';
+$res['body_id'] = 'info';
 
 $yield_for['nav'] = 'logged_in';
 
