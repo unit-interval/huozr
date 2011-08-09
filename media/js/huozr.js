@@ -17,6 +17,10 @@ $(function(){
 	}).blur(function(){
 		
 	})
+	//-------------------- Login Page --------------------
+	$('#login #signup > button').click(function(){
+		$(this).parents('#login-here').hide().next().show();
+	})
 	//-------------------- HOME Page --------------------
 	if ($('#home #order ul.menu').length) view_orders(0);  
 	else new_order(0);
