@@ -2,6 +2,7 @@
 
 /**
  * OAuth related functions
+ * app keys are defined in local.keys.php
  */
 //sina weibo API
 define('SINAWB_API_BASE', 'http://api.t.sina.com.cn/');
@@ -33,22 +34,25 @@ define('RENREN_SSKEY_URL','https://graph.renren.com/renren_api/session_key');
 define('RENREN_CB_URL','');
 */
 
-//douban oauth,result: array with token, secret, remote_id, remote_screen_name.
-
+/*
+ * douban oauth
+ * return value:
+ * 		array with token, secret, remote_id, remote_screen_name;
+ * 		or false if failed to connect.
+ */
 function douban_oauth($oauth_token){
 	try {
 		$oauth = new OAuth(DOUBAN_AKEY, DOUBAN_SKEY);
-		$oauth->enableDebug();
+		if(DEV_ENV)
+			$oauth->enableDebug();
+		$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);		
 		if(!isset($oauth_token) && !$_SESSION['douban_state']) {
-			$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);		
 			$request_token = $oauth->getRequestToken(DOUBAN_REQ_URL);
 			$_SESSION['douban_secret'] = $request_token['oauth_token_secret'];
 			$_SESSION['douban_state'] = 1;
-			header('Location: ' . DOUBAN_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . rawurlencode(DOUBAN_CB_URL) . '&display=page');
-			exit;
+			redir_to(DOUBAN_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . rawurlencode(DOUBAN_CB_URL) . '&display=page');
 		} elseif($_SESSION['douban_state']==1) {
 			$douban = array();
-			$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);		
 			$oauth->setToken($oauth_token,$_SESSION['douban_secret']);
 			$access_token = $oauth->getAccessToken(DOUBAN_ACC_URL);
 			$douban['token'] = $access_token['oauth_token'];
@@ -60,14 +64,17 @@ function douban_oauth($oauth_token){
 			$douban['remote_id'] = $json['db:uid']['$t'];
 			unset ($_SESSION['douban_state']);
 			unset ($_SESSION['douban_secret']);			
+			if(! $douban['remote_id'])
+				return false;
 			return $douban;
 		}
 	} catch(OAuthException $E) {
 		unset ($_SESSION['douban_state']);
-		echo '<a href="/login/">豆瓣在和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
-		//echo '<a href="login.php?s=douban">An error occurred, please retry.<a>';
-		//print_r($E);
-	
+		err_debug($E, $_SESSION);
+		err_warn('douban oauth error')
+		//TODO notice user
+		redir_to('/login/');
+		//echo '<a href="/login/">豆瓣在和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
 	}
 }
 
@@ -79,8 +86,7 @@ function renren_oauth($code){
 	try {
 		if(!isset($code) && !$_SESSION['renren_state']) {
 			$_SESSION['renren_state'] = 1;
-			header('Location: ' . $oauth->getAuthorizeUrl());
-			exit;
+			redir_to($oauth->getAuthorizeUrl());
 		} elseif($_SESSION['renren_state']==1) {
 			$renren = array();
 			$token = $oauth->getAccessToken($code);
@@ -89,19 +95,18 @@ function renren_oauth($code){
 			$renren['token'] = $token['access_token'];
 			$renren['secret'] = $key['renren_token']['session_key'];			
 			$users=$client->POST('users.getInfo','uid,name');
-			foreach($users as $user) {
-				$renren['remote_id']=$user['uid'];
-				$renren['remote_screen_name']=$user['name'];
-			}
+			$renren['remote_id']=$users[0]['uid'];
+			$renren['remote_screen_name']=$users[0]['name'];
 			unset ($_SESSION['renren_state']);
 			return $renren;
 		}
-
-
 	} catch(OAuthException $E) {
 		unset ($_SESSION['renren_state']);
-		echo '<a href="/login/">人人网和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
-		//print_r($E);
+		err_debug($E, $_SESSION);
+		err_warn('douban oauth error')
+		//TODO notice user
+		redir_to('/login/');
+		//echo '<a href="/login/">人人网和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
 	}
 
 }
@@ -111,13 +116,13 @@ function renren_oauth($code){
 function sina_weibo_oauth($oauth_token){
 	try {
 		$oauth = new OAuth(SINAWB_AKEY, SINAWB_SKEY);
-		$oauth->enableDebug();
+		if(DEV_ENV)
+			$oauth->enableDebug();
 		if(!isset($oauth_token) && !$_SESSION['sinawb_state']) {
 			$request_token = $oauth->getRequestToken(SINAWB_REQ_URL);
 			$_SESSION['sinawb_secret'] = $request_token['oauth_token_secret'];
 			$_SESSION['sinawb_state'] = 1;
-			header('Location: ' . SINAWB_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . rawurlencode(SINAWB_CB_URL) . '&display=page');
-			exit;
+			redir_to(SINAWB_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . rawurlencode(SINAWB_CB_URL) . '&display=page');
 		} elseif($_SESSION['sinawb_state']==1) {
 			$sinawb = array();
 			$oauth->setToken($oauth_token,$_SESSION['sinawb_secret']);
@@ -133,12 +138,12 @@ function sina_weibo_oauth($oauth_token){
 			unset ($_SESSION['sinawb_secret']);
 			return $sinawb;
 		}
-
 	} catch(OAuthException $E) {
 		unset ($_SESSION['sinawb_state']);
-		echo '<a href="/login/">新浪微博在和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
-		//print_r($E);
-	
+		err_debug($E, $_SESSION);
+		err_warn('douban oauth error.')
+		//TODO notice user
+		redir_to('/login/');
 	}
 }
 
@@ -147,24 +152,22 @@ function sina_weibo_oauth($oauth_token){
 function tencent_weibo_oauth($oauth_token){
 	try {
 		$oauth = new OAuth(QQWB_AKEY, QQWB_SKEY);
-		$oauth->enableDebug();
+		if(DEV_ENV)
+			$oauth->enableDebug();
 		//腾讯的独到之处
 		$oauth->setNonce(md5(rand()));
 		$oauth->setAuthType(OAUTH_AUTH_TYPE_URI);
-		//
 		if(!isset($oauth_token) && !$_SESSION['qqwb_state']) {
 			$request_token = $oauth->getRequestToken(QQWB_REQ_URL,QQWB_CB_URL);
 			$_SESSION['qqwb_secret'] = $request_token['oauth_token_secret'];
 			$_SESSION['qqwb_state'] = 1;
-			header('Location: ' . QQWB_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . QQWB_CB_URL . '&display=page');
-			exit;
+			redir_to(QQWB_AUTH_URL . '?oauth_token=' . $request_token['oauth_token'] . '&oauth_callback=' . QQWB_CB_URL . '&display=page');
 		} elseif($_SESSION['qqwb_state']==1) {
 			$qqwb = array();
 			$oauth->setToken($oauth_token,$_SESSION['qqwb_secret']);
 			$access_token = $oauth->getAccessToken(QQWB_ACC_URL);
 			$qqwb['token'] = $access_token['oauth_token'];
 			$qqwb['secret'] = $access_token['oauth_token_secret'];
-			//$_SESSION['qqwb_uid'] = $access_token['user_id'];
 			$oauth->setToken($qqwb['token'],$qqwb['secret']);
 			$oauth->fetch('http://open.t.qq.com/api/user/info');
 			$json = json_decode($oauth->getLastResponse(), true);
@@ -176,9 +179,10 @@ function tencent_weibo_oauth($oauth_token){
 		}
 	} catch(OAuthException $E) {
 		unset ($_SESSION['qqwb_state']	);
-		echo '<a href="/login/">腾讯微博和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
-		//print_r($E);
-	
+		err_debug($E, $_SESSION);
+		err_warn('douban oauth error.')
+		//TODO notice user
+		redir_to('/login/');
 	}
 }
 

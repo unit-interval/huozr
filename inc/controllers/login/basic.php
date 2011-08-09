@@ -1,6 +1,6 @@
 <?php
 
-include_once DIR_INC . '/func-user.php';
+include_once DIR_INC . '/func-auth.php';
 
 if($user = user_exists($_POST['username'])){
 	if(md5(SALT_PW . $_POST['passwd']) == $user['passwd']){ 
