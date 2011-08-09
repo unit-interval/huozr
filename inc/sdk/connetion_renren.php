@@ -771,6 +771,7 @@ class RenRenOauth extends RESTClient {
 		
 		# check error
 		if(isset($ret['error_description'])) {
+			unset ($_SESSION['renren_state']);
 			throw new Exception($ret['error_description']);
 		}
 		

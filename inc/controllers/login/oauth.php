@@ -6,15 +6,16 @@ include_once DIR_INC . '/func-oauth.php';
 
 accepts('douban', 'renren', 'sina_weibo', 'tencent_weibo');
 
+$service = $req_path[0];
+
+
 /** renren doesn't use oauth standards */
 
 if(isset($_GET['code']))
 	$_GET['oauth_token'] = $_GET['code'];
 
-if(!isset($_GET['oauth_token']) && $_SESSION['state']==1)
-	$_SESSION['state'] = 0;
-
-$service = $req_path[0];
+if(!isset($_GET['oauth_token']) && $_SESSION[$service.'_state']==1)
+	$_SESSION[$service.'_state'] = 0;
 
 /** use variable function name to "_oauth" different services */
 $function_handle = $service . '_oauth';
