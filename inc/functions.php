@@ -25,7 +25,7 @@ function err_debug($dump = false) {
  * for common users, log error, but script continues to run
  * for developers, exit script, outputing error msg
  */
-function err_warn($msg) {
+function err_warn($msg = '') {
 	if (! DEV_ENV) {
 		error_log(date('c') . " Warning: {$_SERVER['REQUEST_URI']}: $msg");
 		return;
@@ -41,7 +41,7 @@ function err_warn($msg) {
  * for common users, log error and show error page, interrupting any unfinished job.
  * for developers, output all defined variables
  */
-function err_fatal($msg) {
+function err_fatal($msg = '') {
 	if (! DEV_ENV) {
 		error_log(date('c') . " FATAL: {$_SERVER['REQUEST_URI']}: $msg");
 		err_redir();
@@ -66,7 +66,7 @@ function err_redir() {
 /**
  * basic http header redirecting
  */
-function redir_to($loc) {
+function redir_to($loc = '/') {
 	header("Locaton: $loc");
 	exit;
 }
