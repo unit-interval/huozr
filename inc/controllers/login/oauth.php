@@ -19,13 +19,12 @@ if(!isset($_GET['oauth_token']) && $_SESSION[$service.'_state']==1)
 
 /** use variable function name to "_oauth" different services */
 $function_handle = $service . '_oauth';
-$oauth = $function_handle($_GET['oauth_token']);
-
-/** actually douban is the only one who returns to callback when the auth fails */
-if (! $oauth['remote_id']) {
-	header('Location: /login/');
-	//TODO: notice user
-	die();
+// call respective oauth function, for instance douban_oauth()
+if (! ($oauth = $function_handle($_GET['oauth_token']))) {
+	// actually douban is the only one who returns the control to us upon failure
+	err_warn("$service oauth fail.")
+	// TODO notice user
+	redir_to('/login/');
 }
 
 if($user = user_openid_auth_exists($service, $oauth['remote_id'])){
@@ -35,13 +34,13 @@ if($user = user_openid_auth_exists($service, $oauth['remote_id'])){
 	if(isset($_SESSION['callback_uri'])) {
 		$uri = $_SESSION['callback_uri'];
 		unset($_SESSION['callback_uri']);
-		header("Location: $uri");
+		redir_to($uri);
 	}
-	header('Location: /home');	
+	redir_to('/home/');
 }else{
 	//转入初次登录后页面
 	user_login(user_openid_auth(user_create($oauth['remote_screen_name']), $service, $oauth['remote_id'], $oauth['token'], $oauth['secret']), FALSE);
 	//TODO update the target location
-	header('Location: /home');	
+	redir_to('/home/');
 }
 

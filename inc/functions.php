@@ -4,6 +4,24 @@
  * error handling
  * make sure error logging work on live site.
  */
+
+/**
+ * for developers only, dump all param to browser
+ */
+function err_debug() {
+	if(! DEV_ENV)
+		return;
+	for ($i = 0; $i < func_num_args(); $i++) {
+		echo "<hr /><p><h3><em>FATAL: </em>$msg</h3></p><pre>";
+		print_r(func_get_args());
+		echo "</pre>";
+		die;
+	}
+}
+/** 
+ * for common users, log error, but script continues to run
+ * for developers, exit script, outputing error msg
+ */
 function err_warn($msg) {
 	if (! DEV_ENV) {
 		error_log(date('c') . " Warning: {$_SERVER['REQUEST_URI']}: $msg");
@@ -16,21 +34,38 @@ function err_warn($msg) {
 	echo "</pre>";
 	die;
 }
+/**
+ * for common users, log error and show error page, interrupting any unfinished job.
+ * for developers, output all defined variables
+ */
 function err_fatal($msg) {
-	if (DEV_ENV) {
-		echo "<hr /><p><h3><em>FATAL: </em>$msg</h3></p><pre>";
-		print_r(get_defined_vars());
-		print_r($_SESSION);
-		print_r($GLOBALS);
-		echo "</pre>";
-		die;
+	if (! DEV_ENV) {
+		error_log(date('c') . " FATAL: {$_SERVER['REQUEST_URI']}: $msg");
+		err_redir();
 	}
-	error_log(date('c') . " FATAL: {$_SERVER['REQUEST_URI']}: $msg");
-	err_redir();
+	echo "<hr /><p><h3><em>FATAL: </em>$msg</h3></p><pre>";
+	print_r(get_defined_vars());
+	print_r($_SESSION);
+	print_r($GLOBALS);
+	echo "</pre>";
+	die;
 }
+/**
+ * redirect user to error page
+ * TODO which error types is this page designed for?
+ * TODO show notice on target page
+ */
 function err_redir() {
 	header("Location: /error");
 	die;
+}
+
+/**
+ * basic http header redirecting
+ */
+function redir_to($loc) {
+	header("Locaton: $loc");
+	exit;
 }
 
 /**
