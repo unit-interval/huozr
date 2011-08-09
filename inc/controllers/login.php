@@ -1,6 +1,6 @@
 <?php
 
-include_once DIR_INC . '/func-user.php';
+include_once DIR_INC . '/func-auth.php';
 
 if(user_login_verify()){
 	header('Location: /home');	

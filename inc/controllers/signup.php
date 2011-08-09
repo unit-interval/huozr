@@ -1,6 +1,6 @@
 <?php
 
-include_once DIR_INC . '/func-user.php';
+include_once DIR_INC . '/func-auth.php';
 
 //TODO move logic to a 'raw' page
 if ($_POST['username']!='') {
