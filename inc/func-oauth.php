@@ -63,6 +63,8 @@ function douban_oauth($oauth_token){
 			return $douban;
 		}
 	} catch(OAuthException $E) {
+		unset ($_SESSION['douban_state']);
+		echo '<a href="/login/">豆瓣在和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
 		//echo '<a href="login.php?s=douban">An error occurred, please retry.<a>';
 		//print_r($E);
 	
@@ -97,8 +99,9 @@ function renren_oauth($code){
 
 
 	} catch(OAuthException $E) {
-		echo '<p>An error occurred, please come back later.<p>';
-		print_r($E);
+		unset ($_SESSION['renren_state']);
+		echo '<a href="/login/">人人网和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
+		//print_r($E);
 	}
 
 }
@@ -132,8 +135,9 @@ function sina_weibo_oauth($oauth_token){
 		}
 
 	} catch(OAuthException $E) {
-		echo '<a href="login.php?s=sina_weibo">An error occurred, please retry.<a>';
-		print_r($E);
+		unset ($_SESSION['sinawb_state']);
+		echo '<a href="/login/">新浪微博在和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
+		//print_r($E);
 	
 	}
 }
@@ -171,8 +175,9 @@ function tencent_weibo_oauth($oauth_token){
 			return $qqwb;
 		}
 	} catch(OAuthException $E) {
-		echo '<a href="login.php?s=tencent_weibo">An error occurred, please retry.<a>';
-		print_r($E);
+		unset ($_SESSION['qqwb_state']	);
+		echo '<a href="/login/">腾讯微博和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
+		//print_r($E);
 	
 	}
 }
