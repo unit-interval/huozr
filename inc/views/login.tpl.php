@@ -2,9 +2,8 @@
 	<div id='login-oauth'>
 		<h4>已经拥有以下合作网站的帐号？无需注册，直接登录：</h4>
 		<ul>
-			<li><a href='login/douban' id='douban-login' class='button-orange'>豆瓣</a></li>
-			<li><a href='login/renren' id='renren-login' class='button-orange'>人人</a></li>
-			<li><a href='login/weibo' id='weibo-login' class='button-orange'>新浪微博</a></li>
+			<? foreach ($oauth_site as $key => $value) { ?>
+			<li><a href='login/<?= $key ?>' class='button-orange'><?= $value ?></a></li> <? } ?>
 		</ul>
 	</div>
 	<div id='login-form'>
