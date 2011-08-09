@@ -28,9 +28,14 @@
 				<p>HD recordings of the keynotes, sessions and After Hours parties are now ready at I/O Live. </p> 
 				<p class="date">2 months ago</p> 
 			</div> 
+			<div class="announcement"> 
+				<h4>Missed out on Google I/O 2011?</h4> 
+				<p>HD recordings of the keynotes, sessions and After Hours parties are now ready at I/O Live. </p> 
+				<p class="date">2 months ago</p> 
+			</div> 
 		</div> 
 		<div class="arrow-nav"> 
-			<a href="#" class="up"></a><a href="#" class="down-inactive"></a> 
+			<a href="#" class="up up-inactive"></a><a href="#" class="down"></a> 
 		</div> 
 	</div> 
 	<div id='weibo' class='content-item'> 
@@ -47,7 +52,7 @@
 			</div> 
 		</div> 
 		<div class="arrow-nav"> 
-			<a href="#" class="up"></a><a href="#" class="down down-inactive"></a> 
+			<a href="#" class="up up-inactive"></a><a href="#" class="down"></a> 
 		</div> 
 	</div> 
 </div> 

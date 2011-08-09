@@ -4,6 +4,11 @@ $(function(){
 		$('#notification-icon').toggleClass('active');
 		$('#notification').toggleClass('active').children('div').children('ul').css('max-height', $(window).height()-90);
 	})
+	//-------------------- Huozr-More --------------------
+	$('#huozr-more-icon').click(function(){
+		$('#huozr-more-icon').toggleClass('active');
+		$('#huozr-more').toggleClass('active');
+	})
 	//-------------------- Input-Select --------------------
 	$('div.input-select').delegate('ul > li', 'click', function(){
 		$(this).parent().hide().siblings('input.input-text').val($(this).text());
