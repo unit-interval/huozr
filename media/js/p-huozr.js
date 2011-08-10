@@ -13,7 +13,10 @@ $(function(){
 		$(this).addClass('active').siblings().removeClass('active');
 		view_orders($(this).data('oid'));
 	});
-	$('#home #detail-wrapper').height($(document).height()-350);
+	$('#home #detail-wrapper').height($(window).height()-130);
+	$(window).resize(function(){
+		$('#home #detail-wrapper').height($(window).height()-130);
+	})
 	//-------------------- SETTING Page --------------------
 	$('#setting #set-password').hide().next().hide();
 	if ($('#setting #username').find('input').val() == '') $('#setting #username').find('button.button-blue').hide();

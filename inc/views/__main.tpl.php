@@ -7,9 +7,7 @@
 	<meta http-equiv="content-language" content="zh-CN" />
 	<title><?= $head_title ?></title>
 	<?= css_link_tags() ?>
-
 	<?= js_script_tags() ?>
-
 </head>
 <body id='<?= $body_id ?>'>
 	<div id='wrapper'>
