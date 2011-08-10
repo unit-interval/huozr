@@ -7,14 +7,14 @@
 		</ul>
 	</div>
 	<div id='login-form'>
-		<form action='login' method='post'>
+		<form action='/login/basic' method='post'>
 			<h4>或者，通过活字网帐号登录：</h4>
 			<div class='input-group'>
-				<input class='input-text' type='text' id='email' name='email' placeholder='用户名' />
+				<input class='input-text' type='text' id='username' name='username' placeholder='用户名' />
 				<label class='label-hint' for='email'>帐号或密码错误，请重试。</label>
 			</div>
 			<div class='input-group'>
-				<input class='input-text' type='password' id='password' name='email' placeholder='密码' />
+				<input class='input-text' type='password' id='passwd' name='passwd' placeholder='密码' />
 				<label class='label-hint' for='password'>密码太短。</label>
 			</div>
 			<div class='input-group'>

@@ -15,11 +15,15 @@ function filter_access_control() {
 	$req_str = trim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
 
 	$path = '';
-	for ($offset = 0; $pos = strpos($req_str, '/', $offset), $offset = $pos + 1) {
-		$path .= substr($req_str, 0, $pos);
+	$offset = 0; 
+	while ($pos = strpos($req_str, '/', $offset)) {
+		$path .= substr($req_str, 0, $pos + 1);
 		if (in_array($path, $exclude))
 			return;
+		$offset = $pos + 1;
 	}
+	if (in_array($req_str, $exclude))
+		return;
 	if (! $_SESSION['u_id']) {
 		//TODO generalized callback solution
 		$_SESSION['callback_uri'] = $_SERVER['REQUEST_URI'];
