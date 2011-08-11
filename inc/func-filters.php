@@ -9,6 +9,8 @@ function filter_access_control() {
 		'',
 		'login',
 		'login/',
+		'partner',
+		'partner/',
 		'404',
 	);
 
@@ -32,6 +34,7 @@ function filter_access_control() {
 	}
 }
 function filter_access_control_partner() {
+	global $req_path;
 	if ($req_path[0] == 'login')
 		return;
 	if (! $_SESSION['p_id']) {

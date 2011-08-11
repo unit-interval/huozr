@@ -2,6 +2,8 @@
 
 include_once DIR_INC . '/func-auth.php';
 
+return;
+
 if(partner_login_verify())
 	redir_to('/partner/');
 

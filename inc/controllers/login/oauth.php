@@ -22,7 +22,7 @@ $function_handle = $service . '_oauth';
 // call respective oauth function, for instance douban_oauth()
 if (! ($oauth = $function_handle($_GET['oauth_token']))) {
 	// actually douban is the only one who returns the control to us upon failure
-	err_warn("$service oauth fail.")
+	err_warn("$service oauth fail.");
 	// TODO notice user
 	redir_to('/login/');
 }
