@@ -18,6 +18,15 @@
 	box-shadow: none;
 	margin-top: 0
 }
+/* -------------------- Footer -------------------- */
+#footer-content {
+	width: 100%;
+}
+#footer #footer-left,
+#footer #footer-right {
+	margin: 0 20px;
+}
+
 /* -------------------- Login -------------------- */
 #login #content div.input-group {
 	margin-bottom: 10px;
@@ -45,32 +54,6 @@
 }
 #login #signup-here {
 	display: none;
-}
-/* -------------------- Sitetour -------------------- */
-#sitetour #content div.input-group {
-	margin-bottom: 10px;
-}
-#sitetour #content p {
-	font-size: 22px;
-    color: #939393;
-    font-weight: normal;
-    line-height: 32px;
-    margin: 0 0 22px;
-}
-#sitetour div.control,
-#sitetour #sitetour-second {
-	margin-top: 20px;
-	border-top: 1px dashed #DDD;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	position: relative;
-}
-#sitetour #start {
-	position: absolute;
-}
-#sitetour #start {
-	margin-left: 50%;
-	left: -45px;
 }
 /* -------------------- Home Page -------------------- */
 #home #content {
