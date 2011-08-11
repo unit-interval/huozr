@@ -67,7 +67,7 @@ function err_redir() {
  * basic http header redirecting
  */
 function redir_to($loc = '/') {
-	header("Locaton: $loc");
+	header("Location: $loc");
 	exit;
 }
 
