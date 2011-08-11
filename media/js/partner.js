@@ -1,8 +1,7 @@
 $(function(){
-	//-------------------- Huozr-More --------------------
-	$('#huozr-more-icon').click(function(){
-		$('#huozr-more-icon').toggleClass('active');
-		$('#huozr-more').toggleClass('active');
+	//-------------------- Login Page --------------------
+	$('#login #signup > button').click(function(){
+		$(this).parents('#login-here').hide().next().show();
 	})
 	//-------------------- HOME Page --------------------
 	$('#home #category').delegate('li', 'click', function(){
