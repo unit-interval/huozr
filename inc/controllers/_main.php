@@ -7,7 +7,7 @@ include DIR_INC . '/func-filters.php';
 include path_ctrl('_defaults', 3);
 
 if ($req_path[0] === '')
-	$req_path[0] = 'index';
+	$req_path[0] = '_index';
 
 /**
  * map requests to their controllers
