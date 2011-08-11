@@ -35,7 +35,11 @@ function filter_access_control() {
 }
 function filter_access_control_partner() {
 	global $req_path;
-	if ($req_path[0] == 'login')
+	$exclude = array(
+		'login',
+		'auth',
+	);
+	if (in_array($req_path[0],$exclude))
 		return;
 	if (! $_SESSION['p_id']) {
 		//TODO generalized callback solution

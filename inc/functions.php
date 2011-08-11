@@ -120,6 +120,6 @@ function path_view($str) {
 /**
  * translate $str to it's view file path
  */
-function cookie_set($name, $value, $expire){
-	return setcookie($name, $value, $expire, '/login/'); 
+function cookie_set($name, $value, $expire, $path = '/login/'){
+	return setcookie($name, $value, $expire, $path); 
 }
