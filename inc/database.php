@@ -24,12 +24,12 @@ class mysqli_ext extends mysqli {
 	/** exit on error for common queries */
 	public function query($query) {
 		if(!($result = parent::query($query)))
-			err_fatal("mysql error: ({$this->errno})$this->error.");
+			err_fatal("mysql error: ({$this->errno})$this->error. the query string was: \"$query\"");
 		return $result;
 	}
 	/** raise error */
-	public function raise_error() {
-		err_fatal("mysql error: ({$this->errno})$this->error.");
+	public function raise_error($query = '') {
+		err_fatal("mysql error: ({$this->errno})$this->error. the query string was: \"$query\"");
 	}
 }
 
