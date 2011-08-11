@@ -31,6 +31,16 @@ function filter_access_control() {
 		redir_to('/login/');
 	}
 }
+function filter_access_control_partner() {
+	if ($req_path[0] == 'login')
+		return;
+	if (! $_SESSION['p_id']) {
+		//TODO generalized callback solution
+		$_SESSION['callback_uri'] = $_SERVER['REQUEST_URI'];
+		// notice user
+		redir_to('/partner/login/');
+	}
+}
 
 /**
  * string_preprocess
