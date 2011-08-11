@@ -1,13 +1,11 @@
 <?php
+//do_filter('access_control_partner');
 
-include_once DIR_INC . '/func-auth.php';
+css_link_tags('partner');
+js_script_tags('partner');
 
-if(partner_login_verify()){
-	header('Location: /partner/home');	
-	die();
-}
+$yield_for['nav'] = 'logged_in';
+$yield_for['footer'] = 'logged_in';
 
-$res['head_title'] = '打印店';
-$res['body_id'] = 'index';
+$res['body_id'] = 'home';
 
-js_script_tags('p-huozr');

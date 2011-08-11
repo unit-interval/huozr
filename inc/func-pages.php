@@ -26,7 +26,7 @@ function css_link_tags() {
 			if(DEV_ENV && ! file_exists($fn))
 				err_warn("file not found: $fn");
 			$ln = RELPATH_CSS . "/$t.css";
-			$html .= "<link rel='stylesheet' type='text/css' href='$ln' />";
+			$html .= "<link rel='stylesheet' type='text/css' href='$ln' />\n";
 		}
 		return $html;
 	} elseif (func_get_arg(0) === '-') {
@@ -54,7 +54,7 @@ function js_script_tags() {
 			if(DEV_ENV && ! file_exists($fn))
 				err_warn("file not found: $fn");
 			$ln = RELPATH_JS . "/$t.js";
-			$html .= "<script type='text/javascript' src='$ln'></script>";
+			$html .= "<script type='text/javascript' src='$ln'></script>\n";
 		}
 		return $html;
 	} elseif (func_get_arg(0) === '-') {

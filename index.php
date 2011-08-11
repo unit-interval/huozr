@@ -3,8 +3,6 @@
 include './config.php';
 include DIR_INC . '/bootstrap.php';
 
-
-
 /** map request to its controller */
 switch ($req_path[0]) {
 	// ajax

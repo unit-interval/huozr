@@ -71,7 +71,7 @@ function douban_oauth($oauth_token){
 	} catch(OAuthException $E) {
 		unset ($_SESSION['douban_state']);
 		err_debug($E, $_SESSION);
-		err_warn('douban oauth error')
+		err_warn('douban oauth error');
 		//TODO notice user
 		redir_to('/login/');
 		//echo '<a href="/login/">豆瓣在和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
@@ -103,7 +103,7 @@ function renren_oauth($code){
 	} catch(OAuthException $E) {
 		unset ($_SESSION['renren_state']);
 		err_debug($E, $_SESSION);
-		err_warn('douban oauth error')
+		err_warn('douban oauth error');
 		//TODO notice user
 		redir_to('/login/');
 		//echo '<a href="/login/">人人网和本网站连接时候出现错误，可能是临时问题，请点此返回，再重试。<a>';
@@ -141,7 +141,7 @@ function sina_weibo_oauth($oauth_token){
 	} catch(OAuthException $E) {
 		unset ($_SESSION['sinawb_state']);
 		err_debug($E, $_SESSION);
-		err_warn('douban oauth error.')
+		err_warn('douban oauth error.');
 		//TODO notice user
 		redir_to('/login/');
 	}
@@ -180,7 +180,7 @@ function tencent_weibo_oauth($oauth_token){
 	} catch(OAuthException $E) {
 		unset ($_SESSION['qqwb_state']	);
 		err_debug($E, $_SESSION);
-		err_warn('douban oauth error.')
+		err_warn('douban oauth error.');
 		//TODO notice user
 		redir_to('/login/');
 	}

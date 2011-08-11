@@ -3,7 +3,8 @@
 		<h4>已经拥有以下合作网站的帐号？无需注册，直接登录：</h4>
 		<ul>
 			<? foreach ($oauth_site as $key => $value) { ?>
-			<li><a href='login/oauth/<?= $key ?>' class='button-orange'><?= $value ?></a></li> <? } ?>
+			<li><a href='login/oauth/<?= $key ?>' class='button-orange'><?= $value ?></a></li>
+			<? } ?>
 		</ul>
 	</div>
 	<div id='login-form'>

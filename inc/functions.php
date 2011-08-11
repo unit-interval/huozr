@@ -13,7 +13,7 @@ function err_debug($dump = false) {
 		return;
 	for ($i = 0; $i < func_num_args(); $i++) {
 		echo "<hr /><p><h3><em>DEBUG: </em>printing/dumping variables</h3></p><pre>";
-		if ($dump)
+		if ($dump === true)
 			var_dump(func_get_args());
 		else
 			print_r(func_get_args());
