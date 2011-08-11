@@ -82,11 +82,8 @@ function redir_to($loc = '/') {
  */
 function path_ctrl($str = '', $m = 0) {
 	static $cache = '';
-	if (! $str) {	// in mode 0/2
-		if ($m == 2)	// exception: index
-			return ($cache == '_index' ? '__index' : $cache);
-		return DIR_CTRL . "/$cache.php";
-	}
+	if (! $str)	// in mode 0/2
+		return ($m == 2 ? $cache : DIR_CTRL . "/$cache.php");
 
 	switch ($m) {
 	case 0:

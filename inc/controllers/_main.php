@@ -6,8 +6,14 @@ include DIR_INC . '/func-filters.php';
 /** set site-wise defaults */
 include path_ctrl('_defaults', 3);
 
+err_debug($req_path, $req_path[0], $req_path[0][1]);
+
+/** quietly ignore direct access to meta controllers */
+if ($req_path[0][0] === '_')
+	$req_path[0] = '';
+
 if ($req_path[0] === '')
-	$req_path[0] = '_index';
+	$req_path[0] = '__index';
 
 /**
  * map requests to their controllers
