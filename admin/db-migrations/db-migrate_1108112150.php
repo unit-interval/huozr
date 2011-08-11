@@ -30,7 +30,7 @@ elseif ($db->errno == 1050) {
 	echo '... omitting, column exists.<br />';
 	return;
 } else
-	$db->raise_error($query);
+	$db->raise_error();
 
 /** insert seed data */
 

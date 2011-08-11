@@ -7,6 +7,7 @@
  * since db error as considered fatal
  */
 class mysqli_ext extends mysqli {
+	public $last_query;
 	/**
 	 * connect and set utf8 as default charset
 	 */
@@ -19,17 +20,19 @@ class mysqli_ext extends mysqli {
 	}
 	/** preserve the original query method */
 	public function rquery($query) {
+		$this->last_query = $query;
 		return parent::query($query);
 	}
 	/** exit on error for common queries */
 	public function query($query) {
+		$this->last_query = $query;
 		if(!($result = parent::query($query)))
 			err_fatal("mysql error: ({$this->errno})$this->error. the query string was: \"$query\"");
 		return $result;
 	}
 	/** raise error */
-	public function raise_error($query = '') {
-		err_fatal("mysql error: ({$this->errno})$this->error. the query string was: \"$query\"");
+	public function raise_error() {
+		err_fatal("mysql error: ({$this->errno})$this->error. the query string was: \"$this->last_query\"");
 	}
 }
 
