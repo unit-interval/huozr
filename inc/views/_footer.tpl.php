@@ -37,6 +37,9 @@
 		</div>
 		<? break;
 	case 'partner': ?>
+		<p id='footer-left'>
+			<?= $_SESSION['p_screen_name'] ?>
+		</p>
 		<? break;
 	default: ?>
 <? } ?>

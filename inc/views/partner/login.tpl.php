@@ -1,14 +1,14 @@
 <div id='login-here'>
 	<div id='login-form'>
-		<form action='login' method='post'>
+		<form action='/partner/auth/' method='post'>
 			<h4>活字打印店登录：</h4>
 			<div class='input-group'>
-				<input class='input-text' type='text' id='email' name='email' placeholder='用户名' />
-				<label class='label-hint' for='email'>帐号或密码错误，请重试。</label>
+				<input class='input-text' type='text' id='partner-email' name='partner-email' placeholder='电子邮箱' />
+				<label class='label-hint' for='partner-email'>帐号或密码错误，请重试。</label>
 			</div>
 			<div class='input-group'>
-				<input class='input-text' type='password' id='password' name='email' placeholder='密码' />
-				<label class='label-hint' for='password'>密码太短。</label>
+				<input class='input-text' type='password' id='passwd' name='passwd' placeholder='密码' />
+				<label class='label-hint' for='passwd'>密码太短。</label>
 			</div>
 			<div class='input-group'>
 				<input checked='checked' id='remember-login' name='remember-login' type='checkbox'>
