@@ -103,7 +103,9 @@ function user_login($user_id, $temp_login){
 		}
 		$user = $result->fetch_assoc();
 		$result->free();
+		$db->query("UPDATE `users` SET  `last_visited` = NOW( ) WHERE  `users`.`id` =".$user_id);
 	}
+	
 	$_SESSION['u_id'] = $user_id;
 	$_SESSION['u_screen_name'] = $user['screen_name'];	
 	if(!$temp_login) {
@@ -171,7 +173,8 @@ function user_cookie_auth() {
 		$credit[$row['pocket']] = $row['amount'];
 		$result->free();
 	}
-	*/		
+	*/	
+	$db->query("UPDATE `users` SET  `last_visited` = NOW( ) WHERE  `users`.`id` =".$uid);	
 	$_SESSION['u_id'] = $uid;
 	$_SESSION['u_screen_name'] = $user['screen_name'];
 	cookie_refresh();
@@ -229,6 +232,7 @@ function partner_login($email,$passwd,$remember){
 	if(md5(SALT_PW . $_POST['passwd']) == $r['passwd']){
 		$_SESSION['p_id'] = $r['id'];
 		$_SESSION['p_screen_name'] = $r['name'];	
+		$db->query("UPDATE `partners` SET  `last_visited` = NOW( ) WHERE  `partners`.`id` =".$r['id']);	
 		if($remember) {
 			$expire = time()+3600*24*30;
 			$stamp = date('YmdHis');
@@ -299,7 +303,8 @@ function partner_cookie_auth() {
 		$credit[$row['pocket']] = $row['amount'];
 		$result->free();
 	}
-	*/		
+	*/
+	$db->query("UPDATE `partners` SET  `last_visited` = NOW( ) WHERE  `partners`.`id` =".$pid);	
 	$_SESSION['p_id'] = $pid;
 	$_SESSION['p_screen_name'] = $r['name'];
 	cookie_refresh('p');
