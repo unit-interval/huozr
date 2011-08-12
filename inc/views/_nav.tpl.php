@@ -5,7 +5,7 @@
 				<a href='/home'>开始</a>
 			</li>
 			<li <? if ($body_id == 'info') { ?> class='active' <? } ?> >
-				<a href='/info'>通知</a>
+				<a href='/notification'>通知</a>
 			</li>
 			<li <? if ($body_id == 'setting') { ?> class='active' <? } ?> >
 				<a href='/setting'>设置</a>

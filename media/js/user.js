@@ -1,4 +1,23 @@
 $(function(){
+	//-------------------- Index Page --------------------
+	$('#index div.arrow-nav a').click(function(){
+		a = $(this);
+		b = a.parent().prev();
+		c = a.siblings();
+		if (a.hasClass('up')){
+			b.animate({scrollTop: "-=200px"}, function(){
+				if (b.scrollTop() == 0) a.addClass('up-inactive');
+				c.removeClass('down-inactive');
+			})
+		}
+		else if (a.hasClass('down')){
+			b.animate({scrollTop: "+=200px"}, function(){
+				if (b.scrollTop() + c.parent().height() <= b.get(0).scrollHeight) a.addClass('down-inactive');
+				c.removeClass('up-inactive');
+			})
+		}
+		return false;
+	})
 	//-------------------- Login Page --------------------
 	$('#login #signup > button').click(function(){
 		$(this).parents('#login-here').hide().next().show();
