@@ -19,6 +19,11 @@ $req_path = explode('/', trim(strtok($_SERVER['REQUEST_URI'], '?'), '/'));
 function req_path() {
 	global $req_path_cur, $req_path;
 //	global $req_path_parent;
+
+	// redircet direct access to meta controllers to 404
+	if ($req_path[0][0] === '_')
+		$req_path[0] = '404';
+
 	$req_path_cur = array_shift($req_path);
 //	if ($req_path_cur)
 //		$req_path_parent[] = $req_path_cur;

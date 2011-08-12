@@ -103,7 +103,9 @@ function user_login($user_id, $temp_login){
 		}
 		$user = $result->fetch_assoc();
 		$result->free();
+		$db->query("UPDATE `users` SET  `last_visited` = NOW( ) WHERE  `users`.`id` =".$user_id);
 	}
+	
 	$_SESSION['u_id'] = $user_id;
 	$_SESSION['u_screen_name'] = $user['screen_name'];	
 	if(!$temp_login) {
@@ -130,13 +132,13 @@ function user_login_verify(){
 	if($_SESSION['u_id']){
 		return $_SESSION['u_id'];		
 	}else{
-		cookie_auth();
+		user_cookie_auth();
 		return $_SESSION['u_id'];
 	}
 }
 
-//cookie autorize
-function cookie_auth() {
+//user cookie autorize
+function user_cookie_auth() {
 	global $db;
 	if(!cookie_verify_hash()) {
 		$_SESSION['u_id'] = '';
@@ -171,36 +173,139 @@ function cookie_auth() {
 		$credit[$row['pocket']] = $row['amount'];
 		$result->free();
 	}
-	*/		
+	*/	
+	$db->query("UPDATE `users` SET  `last_visited` = NOW( ) WHERE  `users`.`id` =".$uid);	
 	$_SESSION['u_id'] = $uid;
 	$_SESSION['u_screen_name'] = $user['screen_name'];
 	cookie_refresh();
 }
 
-//cookie refresh
-function cookie_refresh() {
+//cookie refresh (for both user and partner)
+function cookie_refresh($i = 'u') {
 	$expire = time()+3600*24*30;
-	cookie_set('u_id', $_COOKIE['u_id'], $expire);
-	cookie_set('hash', $_COOKIE['hash'], $expire);
-	cookie_set('stamp', $_COOKIE['stamp'], $expire);
+	if($i='u')
+		$path='/login/';
+	elseif($i='p')
+		$path='/partner/login/';
+	cookie_set($i.'_id', $_COOKIE[$i.'_id'], $expire, $path);
+	cookie_set('hash', $_COOKIE['hash'], $expire, $path);
+	cookie_set('stamp', $_COOKIE['stamp'], $expire, $path);
 }
-// verify cookie hash
-function cookie_verify_hash() {
-	if(!isset($_COOKIE['hash']) || !isset($_COOKIE['u_id']) || !isset($_COOKIE['stamp']))
+// verify cookie hash (for both user and partner)
+function cookie_verify_hash($i = 'u') {
+	if(!isset($_COOKIE['hash']) || !isset($_COOKIE[$i.'_id']) || !isset($_COOKIE['stamp']))
 	return false;
 	$date = date_create();
+	if($i='u')
+		$path='/login/';
+	elseif($i='p')
+		$path='/partner/login/';	
 	$salt1 = $date->format('Y-M-');
 	$date->modify('-1 month');
 	$salt2 = $date->format('Y-M-');
-	if (($_COOKIE['hash'] == md5($salt1 . $_COOKIE['u_id'] . $_COOKIE['stamp'])) ||
-	($_COOKIE['hash'] == md5($salt2 . $_COOKIE['u_id'] . $_COOKIE['stamp'])))
+	if (($_COOKIE['hash'] == md5($salt1 . $_COOKIE[$i.'_id'] . $_COOKIE['stamp'])) ||
+	($_COOKIE['hash'] == md5($salt2 . $_COOKIE[$i.'_id'] . $_COOKIE['stamp'])))
 	return true;
 	else {
-		cookie_set('hash', '', time()-3600);
-		cookie_set('u_id', '', time()-3600);
-		cookie_set('stamp', '', time()-3600);		
+		cookie_set('hash', '', time()-3600,$path);
+		cookie_set($i.'_id', '', time()-3600,$path);
+		cookie_set('stamp', '', time()-3600,$path);		
 		return false;
 	}
 }
 
+/********************** special functions for partners **********************/
+//partner login
 
+function partner_login($email,$passwd,$remember){
+	global $db;
+	$query = "select * from `partners`
+		where `email` = '$email'";
+	if($result = $db->query($query)) {
+		if($result->num_rows === 0) {
+			$_SESSION['p_id'] = ''; 	
+			return;
+		}
+		$r = $result->fetch_assoc();
+		$result->free();
+	}
+	if(md5(SALT_PW . $_POST['passwd']) == $r['passwd']){
+		$_SESSION['p_id'] = $r['id'];
+		$_SESSION['p_screen_name'] = $r['name'];	
+		$db->query("UPDATE `partners` SET  `last_visited` = NOW( ) WHERE  `partners`.`id` =".$r['id']);	
+		if($remember) {
+			$expire = time()+3600*24*30;
+			$stamp = date('YmdHis');
+			cookie_set('p_id', $r['id'], $expire,'/partner/login/');
+			cookie_set('stamp', $stamp, $expire,'/partner/login/');
+			cookie_set('hash', md5(date('Y-M-').$user_id.$stamp), $expire,'/partner/login/');
+		} else
+			cookie_set('p_id', '', time()-3600,'/partner/login/');
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+//partner log out
+
+function partner_logout(){
+	cookie_set('hash', '', time()-3600,'/partner/login/');
+	cookie_set('p_id', '', time()-3600,'/partner/login/');
+	cookie_set('stamp', '', time()-3600,'/partner/login/');
+	unset ($_SESSION['p_id']);
+	unset ($_SESSION['p_screen_name']);
+}
+
+//partner login verify, result true or false
+function partner_login_verify(){
+	if($_SESSION['p_id']){
+		return $_SESSION['p_id'];		
+	}else{
+		partner_cookie_auth();
+		return $_SESSION['p_id'];
+	}
+}
+
+function partner_cookie_auth() {
+	global $db;
+	if(!cookie_verify_hash('p')) {
+		$_SESSION['p_id'] = '';
+		return;
+	}
+	$pid = $_COOKIE['p_id'];
+ 
+	$query = "select * from `partners`
+		where `id` = $pid";
+	if($result = $db->query($query)) {
+		if($result->num_rows === 0) {
+			$_SESSION['p_id'] = '';
+			cookie_set('hash', '', time()-3600,'/partner/login/');
+			cookie_set('p_id', '', time()-3600,'/partner/login/');
+			cookie_set('stamp', '', time()-3600,'/partner/login/');		
+			return;
+		}
+		$r = $result->fetch_assoc();
+		$result->free();
+	}
+	/*	
+	if($_COOKIE['stamp'] <= $user['`stamp`+0']) {
+		$_SESSION['logged_in'] = false;
+		cookie_set('hash', '', time()-3600);
+		return;
+	}	
+	$query = "select `pocket`, `amount` from `credit`
+		where `id` = $uid";
+	if($result = $db->query($query)) {
+		$credit = array();
+		while($row = $result->fetch_assoc())
+		$credit[$row['pocket']] = $row['amount'];
+		$result->free();
+	}
+	*/
+	$db->query("UPDATE `partners` SET  `last_visited` = NOW( ) WHERE  `partners`.`id` =".$pid);	
+	$_SESSION['p_id'] = $pid;
+	$_SESSION['p_screen_name'] = $r['name'];
+	cookie_refresh('p');
+}

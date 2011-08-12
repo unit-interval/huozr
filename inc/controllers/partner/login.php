@@ -2,8 +2,8 @@
 
 include_once DIR_INC . '/func-auth.php';
 
-/* if(partner_login_verify())
-	redir_to('/partner/'); */
+ if(partner_login_verify())
+	redir_to('/partner/'); 
 
 $yield_for['nav'] = '';
 $yield_for['footer'] = '';
