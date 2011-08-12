@@ -18,7 +18,7 @@ a img {
     border: 0;
 }
 a:hover {
-    color: #343434;
+    
 }
 #wrapper {
 	padding-top: 7px;
@@ -763,6 +763,84 @@ div.input-select > ul > li:hover {
 #setting #reset-password input {
 	width: 400px;
 } 
+/* -------------------- Info Page -------------------- */
+#info #main {
+	padding-top: 15px;
+	width: 600px;
+	word-wrap: break-word;
+	margin: 0 auto;
+	border: 1px solid #EBEBEB;
+}
+#info #main h3 {
+	color: #333;
+	margin: 16px 21px 0;
+	font-size: 18px;
+}
+#info #search {
+	margin: 10px 21px 15px;
+}
+#info #search input {
+	width: 450px;
+}
+#info #search button {
+	float: right;
+	width: 80px;
+}
+#info div.info-content {
+	background-color: white;
+	border-left: 1px solid transparent;
+	border-top: 1px solid #EEE;
+	clear: both;
+	font-size: 13px;
+	line-height: 1.4;
+	padding: 16px 65px 16px 81px;
+	word-wrap: break-word;
+}
+#info div.info-content h4 {
+	font-size: 13px;
+	color: #999;
+}
+#info a.info-icon > img {
+	margin-left: -60px;
+	width: 48px;
+	float: left;
+}
+#info a.info-avatar > img {
+	float: left;
+	height: 32px;
+	margin-left: -40px;
+	width: 32px;
+}
+#info div.info-detail {
+	border-bottom: 1px solid #EEE;
+}
+#info div.info-update > div {
+	border-bottom: 1px solid #EEE;
+	padding: 8px 7px 7px 47px;
+}
+#info div.info-update > div > h4,
+#info div.info-update > div > p {
+	margin: 0
+}
+#info div.info-control {
+	padding: 8px 0 0 47px;
+}
+#info div.info-control button {
+	font-size: 13px;
+}
+#info #info-more {
+	color: #36C;
+	font-weight: bold;
+	background-color: #FAFAFA;
+	border-top: 1px solid #E3E3E3;
+	cursor: pointer;
+	display: block;
+	padding: 10px 0;
+	text-align: center;
+}
+#info #info-more:hover {
+	background-color:#f4f4f4;
+}
 /* -------------------- Footer -------------------- */
 #footer {
     background: #2D2D2D;

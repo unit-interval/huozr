@@ -1,18 +1,14 @@
 <div id='main'> 
 	<div id='advertisement' class='content-item'> 
-		<h1>校园生活小帮手</h1> 
-		<div class='content'> 
-			jkfsdjflksjd<br><br><br><br><br><br><br><br><br><br> 
-			jkfsdjflksjd<br><br><br><br><br><br><br><br><br><br> 
-			jkfsdjflksjd<br><br><br><br><br><br><br><br><br><br> 
+		<h1>校园文印革命</h1> 
+		<div class='content'>
+			发个视频在这里
 		</div> 
 	</div> 
 	<div id='showcase' class='content-item'> 
 		<h1>成功案例</h1> 
-		<div class='content'> 
-			jkfsdjflksjd<br><br><br><br><br><br><br><br><br><br> 
-			jkfsdjflksjd<br><br><br><br><br><br><br><br><br><br> 
-			jkfsdjflksjd<br><br><br><br><br><br><br><br><br><br> 
+		<div class='content'>
+			 这里是各个学校的Logo
 		</div> 
 	</div> 
 </div> 
