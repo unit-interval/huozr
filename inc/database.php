@@ -18,6 +18,10 @@ class mysqli_ext extends mysqli {
 		if (!$this->set_charset("utf8"))
 			err_fatal("mysql error: ({$this->errno})$this->error.");
 	}
+	/** raise error */
+	public function raise_error() {
+		err_fatal("mysql error: ({$this->errno})$this->error. the query string was: \"$this->last_query\"");
+	}
 	/** preserve the original query method */
 	public function rquery($query) {
 		$this->last_query = $query;
@@ -30,9 +34,12 @@ class mysqli_ext extends mysqli {
 			err_fatal("mysql error: ({$this->errno})$this->error. the query string was: \"$query\"");
 		return $result;
 	}
-	/** raise error */
-	public function raise_error() {
-		err_fatal("mysql error: ({$this->errno})$this->error. the query string was: \"$this->last_query\"");
+	/** exit if pareparation of statement fails */
+	public function prepare($query) {
+		$this->last_query = $query;
+		if(!($stmt = parent::prepare($query)))
+			err_fatal("mysql error: ({$this->errno})$this->error. the prepare string was: \"$query\"");
+		return $stmt;
 	}
 }
 
