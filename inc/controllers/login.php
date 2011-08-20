@@ -3,7 +3,7 @@
 include_once DIR_INC . '/func-auth.php';
 
 /** redirect logged in users to /home/ */
-if(isset($_SESSION['user_id']))
+if($_SESSION['user_id'])
 	redir_to('/home/');
 
 js_script_tags('user');

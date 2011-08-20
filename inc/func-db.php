@@ -6,5 +6,7 @@ function find_by_id($table, $id) {
 	$stmt->bind_param('i', $id);
 	$stmt->execute();
 	$stmt->store_result();
-	return ($stmt->num_rows === 0 ? false : true);
+	$retval = ($stmt->num_rows === 0 ? false : true);
+	$stmt->close();
+	return $retval;
 }

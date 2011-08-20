@@ -96,7 +96,7 @@ function user_login($user_id, $temp_login){
 	global $db;
 	$query = "select * from `users`
 		where `id` = $user_id";
-	$result = $db->query($query)
+	$result = $db->query($query);
 	if($result->num_rows === 0) {
 		$_SESSION['user_id'] = ''; 	
 		return;
@@ -308,3 +308,4 @@ function partner_cookie_auth() {
 	$_SESSION['partner_screen_name'] = $r['name'];
 	cookie_refresh('p');
 }
+
