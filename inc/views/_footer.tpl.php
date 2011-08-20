@@ -4,7 +4,7 @@
 			<span id='notification-icon'>
 				<span>0</span>
 			</span>
-			<?= $_SESSION['u_screen_name'] ?>有50页低碳打印配额
+			<?= $_SESSION['user_screen_name'] ?>有50页低碳打印配额
 		</p>
 		<div id='notification'>
 			<div id='notification-summary'>
@@ -38,7 +38,7 @@
 		<? break;
 	case 'partner': ?>
 		<p id='footer-left'>
-			<?= $_SESSION['p_screen_name'] ?>
+			<?= $_SESSION['partner_screen_name'] ?>
 		</p>
 		<? break;
 	default: ?>

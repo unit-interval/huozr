@@ -21,7 +21,7 @@
 		<tr id='nickname'>
 			<th>昵称</th>
 			<td>
-				<input type='text' name='nickname' class='input-text' value='<?= $_SESSION['u_screen_name'] ?>' />
+				<input type='text' name='nickname' class='input-text' value='<?= $_SESSION['user_screen_name'] ?>' />
 				<button type='button' class='button-blue'>修改</button>
 				<button type='submit' class='button-green'>保存</button>
 			</td>
