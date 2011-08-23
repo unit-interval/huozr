@@ -1,6 +1,6 @@
 <ul id='menu'>
 	<li id='flow-menu'>
-		<h4>新建文印</h4>
+		<h4>新建文印<a href='/home/order-new/'>*</a></h4>
 		<ul id='flow' class='menu'>
 			<li>选择打印店</li>
 			<li>选择服务</li>
@@ -20,7 +20,7 @@
 		</ul>
 	</li>
 </ul>
-<form id='flow-detail' class='detail'>
+<form id='flow-detail' class='detail' method='post' action='/home/order-submit/'>
 	<div id='sub-menu'>
 		<div id='store'>
 			<input type='hidden' name='pid' />

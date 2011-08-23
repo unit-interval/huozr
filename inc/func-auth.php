@@ -96,44 +96,43 @@ function user_login($user_id, $temp_login){
 	global $db;
 	$query = "select * from `users`
 		where `id` = $user_id";
-	if($result = $db->query($query)) {
-		if($result->num_rows === 0) {
-			$_SESSION['u_id'] = ''; 	
-			return;
-		}
-		$user = $result->fetch_assoc();
-		$result->free();
-		$db->query("UPDATE `users` SET  `last_visited` = NOW( ) WHERE  `users`.`id` =".$user_id);
+	$result = $db->query($query);
+	if($result->num_rows === 0) {
+		$_SESSION['user_id'] = ''; 	
+		return;
 	}
+	$user = $result->fetch_assoc();
+	$result->free();
+	$db->query("UPDATE `users` SET  `last_visited` = NOW( ) WHERE  `users`.`id` =".$user_id);
 	
-	$_SESSION['u_id'] = $user_id;
-	$_SESSION['u_screen_name'] = $user['screen_name'];	
+	$_SESSION['user_id'] = $user_id;
+	$_SESSION['user_screen_name'] = $user['screen_name'];	
 	if(!$temp_login) {
 		$expire = time()+3600*24*30;
 		$stamp = date('YmdHis');
-		cookie_set('u_id', $user_id, $expire);
+		cookie_set('user_id', $user_id, $expire);
 		cookie_set('stamp', $stamp, $expire);
 		cookie_set('hash', md5(date('Y-M-').$user_id.$stamp), $expire);
 	} else
-		cookie_set('u_id', '', time()-3600);
+		cookie_set('user_id', '', time()-3600);
 }
 
 //log out , no input, no output
 function user_logout(){
 	cookie_set('hash', '', time()-3600);
-	cookie_set('u_id', '', time()-3600);
+	cookie_set('user_id', '', time()-3600);
 	cookie_set('stamp', '', time()-3600);
-	unset ($_SESSION['u_id']);
-	unset ($_SESSION['u_screen_name']);
+	unset ($_SESSION['user_id']);
+	unset ($_SESSION['user_screen_name']);
 }
 
 //user login verify, result true or false
 function user_login_verify(){
-	if($_SESSION['u_id']){
-		return $_SESSION['u_id'];		
+	if($_SESSION['user_id']){
+		return $_SESSION['user_id'];		
 	}else{
 		user_cookie_auth();
-		return $_SESSION['u_id'];
+		return $_SESSION['user_id'];
 	}
 }
 
@@ -141,18 +140,18 @@ function user_login_verify(){
 function user_cookie_auth() {
 	global $db;
 	if(!cookie_verify_hash()) {
-		$_SESSION['u_id'] = '';
+		$_SESSION['user_id'] = '';
 		return;
 	}
-	$uid = $_COOKIE['u_id'];
+	$uid = $_COOKIE['user_id'];
  
 	$query = "select * from `users`
 		where `id` = $uid";
 	if($result = $db->query($query)) {
 		if($result->num_rows === 0) {
-			$_SESSION['u_id'] = '';
+			$_SESSION['user_id'] = '';
 			cookie_set('hash', '', time()-3600);
-			cookie_set('u_id', '', time()-3600);
+			cookie_set('user_id', '', time()-3600);
 			cookie_set('stamp', '', time()-3600);		
 			return;
 		}
@@ -175,8 +174,8 @@ function user_cookie_auth() {
 	}
 	*/	
 	$db->query("UPDATE `users` SET  `last_visited` = NOW( ) WHERE  `users`.`id` =".$uid);	
-	$_SESSION['u_id'] = $uid;
-	$_SESSION['u_screen_name'] = $user['screen_name'];
+	$_SESSION['user_id'] = $uid;
+	$_SESSION['user_screen_name'] = $user['screen_name'];
 	cookie_refresh();
 }
 
@@ -223,24 +222,24 @@ function partner_login($email,$passwd,$remember){
 		where `email` = '$email'";
 	if($result = $db->query($query)) {
 		if($result->num_rows === 0) {
-			$_SESSION['p_id'] = ''; 	
+			$_SESSION['partner_id'] = ''; 	
 			return;
 		}
 		$r = $result->fetch_assoc();
 		$result->free();
 	}
 	if(md5(SALT_PW . $_POST['passwd']) == $r['passwd']){
-		$_SESSION['p_id'] = $r['id'];
-		$_SESSION['p_screen_name'] = $r['name'];	
+		$_SESSION['partner_id'] = $r['id'];
+		$_SESSION['partner_screen_name'] = $r['name'];	
 		$db->query("UPDATE `partners` SET  `last_visited` = NOW( ) WHERE  `partners`.`id` =".$r['id']);	
 		if($remember) {
 			$expire = time()+3600*24*30;
 			$stamp = date('YmdHis');
-			cookie_set('p_id', $r['id'], $expire,'/partner/login/');
+			cookie_set('partner_id', $r['id'], $expire,'/partner/login/');
 			cookie_set('stamp', $stamp, $expire,'/partner/login/');
 			cookie_set('hash', md5(date('Y-M-').$user_id.$stamp), $expire,'/partner/login/');
 		} else
-			cookie_set('p_id', '', time()-3600,'/partner/login/');
+			cookie_set('partner_id', '', time()-3600,'/partner/login/');
 		return true;
 	}
 	else{
@@ -252,37 +251,37 @@ function partner_login($email,$passwd,$remember){
 
 function partner_logout(){
 	cookie_set('hash', '', time()-3600,'/partner/login/');
-	cookie_set('p_id', '', time()-3600,'/partner/login/');
+	cookie_set('partner_id', '', time()-3600,'/partner/login/');
 	cookie_set('stamp', '', time()-3600,'/partner/login/');
-	unset ($_SESSION['p_id']);
-	unset ($_SESSION['p_screen_name']);
+	unset ($_SESSION['partner_id']);
+	unset ($_SESSION['partner_screen_name']);
 }
 
 //partner login verify, result true or false
 function partner_login_verify(){
-	if($_SESSION['p_id']){
-		return $_SESSION['p_id'];		
+	if($_SESSION['partner_id']){
+		return $_SESSION['partner_id'];		
 	}else{
 		partner_cookie_auth();
-		return $_SESSION['p_id'];
+		return $_SESSION['partner_id'];
 	}
 }
 
 function partner_cookie_auth() {
 	global $db;
 	if(!cookie_verify_hash('p')) {
-		$_SESSION['p_id'] = '';
+		$_SESSION['partner_id'] = '';
 		return;
 	}
-	$pid = $_COOKIE['p_id'];
+	$pid = $_COOKIE['partner_id'];
  
 	$query = "select * from `partners`
 		where `id` = $pid";
 	if($result = $db->query($query)) {
 		if($result->num_rows === 0) {
-			$_SESSION['p_id'] = '';
+			$_SESSION['partner_id'] = '';
 			cookie_set('hash', '', time()-3600,'/partner/login/');
-			cookie_set('p_id', '', time()-3600,'/partner/login/');
+			cookie_set('partner_id', '', time()-3600,'/partner/login/');
 			cookie_set('stamp', '', time()-3600,'/partner/login/');		
 			return;
 		}
@@ -305,7 +304,8 @@ function partner_cookie_auth() {
 	}
 	*/
 	$db->query("UPDATE `partners` SET  `last_visited` = NOW( ) WHERE  `partners`.`id` =".$pid);	
-	$_SESSION['p_id'] = $pid;
-	$_SESSION['p_screen_name'] = $r['name'];
+	$_SESSION['partner_id'] = $pid;
+	$_SESSION['partner_screen_name'] = $r['name'];
 	cookie_refresh('p');
 }
+

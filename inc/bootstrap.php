@@ -24,6 +24,9 @@ function req_path() {
 	if ($req_path[0][0] === '_')
 		$req_path[0] = '404';
 
+	if ($req_path[0] === '')
+		$req_path[0] = '__index';
+
 	$req_path_cur = array_shift($req_path);
 //	if ($req_path_cur)
 //		$req_path_parent[] = $req_path_cur;

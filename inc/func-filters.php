@@ -26,7 +26,7 @@ function filter_access_control() {
 	}
 	if (in_array($req_str, $exclude))
 		return;
-	if (! $_SESSION['u_id']) {
+	if (! $_SESSION['user_id']) {
 		//TODO generalized callback solution
 		$_SESSION['callback_uri'] = $_SERVER['REQUEST_URI'];
 		// notice user
@@ -41,7 +41,7 @@ function filter_access_control_partner() {
 	);
 	if (in_array($req_path[0],$exclude))
 		return;
-	if (! $_SESSION['p_id']) {
+	if (! $_SESSION['partner_id']) {
 		//TODO generalized callback solution
 		$_SESSION['callback_uri'] = $_SERVER['REQUEST_URI'];
 		// notice user

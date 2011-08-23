@@ -6,9 +6,6 @@ include DIR_INC . '/func-filters.php';
 /** set site-wise defaults */
 include path_ctrl('_defaults', 3);
 
-if ($req_path[0] === '')
-	$req_path[0] = '__index';
-
 /**
  * map requests to their controllers
  * a physical file must exist for the first level

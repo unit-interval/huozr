@@ -21,7 +21,7 @@
 			<div class='input-group'>
 				<input id='remember-login' name='remember-login' type='checkbox'>
 				<label for="remember-login">保持登录状态</label>
-				<a href='forgot' id='forgot'>忘记密码？</a>
+				<a href='reset/' id='forgot'>忘记密码？</a>
 			</div>
 			<div>
 				<button type='submit' class='button-blue'>登录</button>
