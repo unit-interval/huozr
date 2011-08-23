@@ -573,17 +573,34 @@ div.input-select > ul > li:hover {
 	margin: 0;
 	padding: 0 24px 0 0;
 	font-size: 13px;
-	border-right: 1px solid #DDD
 }
-#home #menu > li {
-	list-style: none;
+#home #flow-detail {
+	border-left: 1px solid #DDD;
+	padding: 0 0 0 24px;
+	width: 661px;
+	overflow: hidden;
 }
-#home #history-menu,
-#home #service,
-#home #upload {
-	border-top: 1px solid #DDD;
-	padding-top: 20px;
-	margin-top: 15px;
+#home #flow-wrapper {
+	width: 9999px;
+}
+#home #flow-wrapper > div {
+	float: left;
+	width: 661px;
+}
+#home div.menu-0 > div {
+	clear: both;
+	margin: 18px;
+}
+#home div.menu-0 > div > img {
+	float: left;
+	width: 64px;
+	height: 64px;
+}
+#home div.menu-0 > div > button {
+	float: right;
+}
+#home div.menu-0 > div > div {
+	margin: 0 18px 0 82px;
 }
 #home #upload-progress {
 	position: relative;
@@ -596,7 +613,7 @@ div.input-select > ul > li:hover {
 	text-indent: -9999px;
 	position: absolute;
 	height: 26px;
-	width: 245px;
+	width: 100%;
 	left: 2px;
 	top: 2px;
 	border-right: 1px solid #DD4B39;
@@ -641,30 +658,6 @@ div.input-select > ul > li:hover {
 	font-size: 15px;
 	font-weight: bold;
 }
-#home #sub-menu, #home #requirement, #home #order, #home #order-detail {
-	padding: 0 0 0 24px;
-	float: left;
-}
-#home #sub-menu {
-	max-width: 661px;
-}
-#home #requirement,
-#home #order-detail {
-	width: 362px;
-}
-#home #requirement, #home #order-detail {
-	border-left: 1px solid #DDD;
-	margin-left: 24px;
-}
-#home #order {
-	max-width: 661px;
-}
-#home #order-detail h4 {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	-o-text-overflow: ellipsis;
-	white-space: nowrap;
-}
 #home #requirement dl {
 	padding: 4px 15px 0;
 	margin-bottom: 2px;
@@ -698,27 +691,6 @@ div.input-select > ul > li:hover {
 }
 #home #order-submit {
 	margin: 8px 15px;
-}
-#home #order-detail table {
-	width: 100%
-}
-#home #order-detail table tr {
-	line-height: 30px;
-	font-size: 13px;
-}
-#home #order-detail table tr.alt > th,
-#home #order-detail table tr.alt > td {
-	background: #EFEFEF;
-}
-#home #order-detail table th {
-	padding: 0 15px;
-	width: 39px;
-}
-#home #order-detail table td {
-	padding: 0 15px;
-	word-wrap: break-word;
-	width: 247px;
-	display: block;
 }
 /* -------------------- Setting -------------------- */
 #setting #content table th {

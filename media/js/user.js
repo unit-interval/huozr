@@ -23,13 +23,8 @@ $(function(){
 		$(this).parents('#login-here').hide().next().show();
 	})
 	//-------------------- HOME Page --------------------
-	if ($('#home #order ul.menu').length) view_orders(0);  
-	else new_order(0);
 	$('#home #flow li').click(function(){
 		if ($(this).hasClass('disabled') == false) new_order($(this).index());
-	});
-	$('#home #history li').click(function(){
-		view_orders($(this).index());
 	});
 	//-------------------- SETTING Page --------------------
 	$('#setting #set-password').hide().next().hide();
@@ -58,28 +53,6 @@ $(function(){
 	
 });
 //-------------------- HOME Function --------------------
-function view_orders(n){
-	$('#home #history > li:eq('+n+')').addClass('active').siblings().removeClass('active');
-	//TODO get orders with status n, place them in history-detail
-	$('#home #order ul.menu li').removeClass('active').click(function(){
-		$(this).addClass('active');
-		$(this).siblings().removeClass('active');
-		view_order_detail($(this).data('oid'));
-	});
-	$('#home #history-detail').show();
-	$('#home #order').css('width', '');
-	$('#home #order-detail').hide();
-	$('#home #flow > li').removeClass('active').first().siblings().addClass('disabled');
-	$('#home #flow-detail').hide();
-}
-
-function view_order_detail(n){
-	//TODO get order_dtail of oid n, place them in order-detail
-	$('#home #order-detail table tr:even').addClass('alt');
-	$('#home #order').css('width', '250px');
-	$('#home #order-detail').slideDown(50);
-}
-
 function new_order(n){
 	$('#home #history > li').removeClass('active');
 	$('#home #history-detail').hide();
